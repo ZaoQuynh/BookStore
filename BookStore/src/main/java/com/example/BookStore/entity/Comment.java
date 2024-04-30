@@ -6,25 +6,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "comments")
+@Embeddable
 public class Comment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @Column
     private String commentText;
     @Column
     private String feedbackText;
-
-    @OneToOne
-    @JoinColumn(name = "commentor_id")
-    private User commentor;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Product product;
+    @Column
+    private Date date;
+    @Column
+    private String commentorName;
 }

@@ -27,10 +27,9 @@ public class OrderItem {
     private int qty;
     @Column
     private BigDecimal currPrice;
-    @Column
-    private boolean hasComment;
-    @Column
-    private boolean hasFeedback;
+
+    @Embedded
+    private Comment comment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Order order;
