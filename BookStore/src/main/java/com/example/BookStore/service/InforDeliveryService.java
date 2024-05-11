@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface InforDeliveryService {
     List<InforDeliveryDTO> findByUserId(Long userId);
+    InforDeliveryDTO findById(Long id);
     InforDeliveryDTO add(InforDeliveryDTO inforDeliveryDTO);
     String CheckInput(InforDeliveryDTO inforDeliveryDTO);
-    InforDeliveryDTO findById(Long id);
 }

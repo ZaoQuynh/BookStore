@@ -7,4 +7,5 @@ public interface CartItemService {
     public boolean delete(Long id);
     public CartItemDTO findById(Long id);
     public CartItemDTO fixNewQuantity(CartItemDTO cartItemDTO, String qtyStr);
+    public void updateQuantity(CartItemDTO cartItemDTO, String qtyStr);
 }

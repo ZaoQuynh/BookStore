@@ -48,15 +48,16 @@ public class InforDeliveryServiceImpl implements InforDeliveryService {
 
     @Override
     public String CheckInput(InforDeliveryDTO inforDeliveryDTO) {
+        String message = null;
         if (Utils.isNullOrEmpty(inforDeliveryDTO.getReceiverName()))
-            return "Vui lòng nhập tên người nhận";
+            message = "Vui lòng nhập tên người nhận";
         if(!Utils.isValidVietnamesePhoneNumber(inforDeliveryDTO.getPhoneNumber()))
-            return "Số điện thoại không hợp lệ!";
+            message = "Số điện thoại không hợp lệ!";
         if ((Utils.isNullOrEmpty(inforDeliveryDTO.getProvince())
                 || Utils.isNullOrEmpty(inforDeliveryDTO.getDistrict())
                 || Utils.isNullOrEmpty(inforDeliveryDTO.getWard())))
-            return "Vui lòng chọn địa chỉ";
-        return null;
+            message = "Vui lòng chọn địa chỉ";
+        return message;
     }
 
     @Override

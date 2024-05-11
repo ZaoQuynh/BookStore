@@ -48,8 +48,7 @@ public class CartItemServiceImpl implements CartItemService {
         if (count == null || count == 0)
             throw new CartItemNotFoundException("Could not find any cartItem with Id=" + id);
         try {
-            Optional<CartItem> cartItem = repos.findById(id);
-
+            repos.deleteById(id);
             return true;
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -79,5 +78,19 @@ public class CartItemServiceImpl implements CartItemService {
             log.error(e.getMessage());
         }
         return cartItemDTO;
+    }
+
+    @Override
+    public void updateQuantity(CartItemDTO cartItemDTO, String qtyStr) {
+        try{
+            cartItemDTO = this.fixNewQuantity(cartItemDTO, qtyStr);
+            if (cartItemDTO.getQty() == 0) {
+                this.delete(cartItemDTO.getId());
+            } else {
+                this.update(cartItemDTO);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 }

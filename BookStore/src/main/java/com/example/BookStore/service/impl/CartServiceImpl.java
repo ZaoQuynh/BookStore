@@ -5,6 +5,7 @@ import com.example.BookStore.entity.CartItem;
 import com.example.BookStore.exception.CartItemNotFoundException;
 import com.example.BookStore.mapper.CartItemMapper;
 import com.example.BookStore.repos.CartItemRepos;
+import com.example.BookStore.service.CartItemService;
 import com.example.BookStore.service.CartService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,25 +20,29 @@ public class CartServiceImpl implements CartService {
     private final Logger log = LogManager.getLogger(CartServiceImpl.class);
 
     @Autowired
-    private CartItemRepos repos;
+    private CartItemRepos cartItemRepos;
+    @Autowired
+    private CartItemService cartItemService;
+
+
 
     @Autowired
-    private CartItemMapper mapper;
+    private CartItemMapper cartItemMapper;
 
     @Override
     public List<CartItemDTO> findActiveByCustomerId(Long userId) {
-        List<CartItem> cartItems = repos.findActiveByCustomerId(userId);
+        List<CartItem> cartItems = cartItemRepos.findActiveByCustomerId(userId);
         if (cartItems == null || cartItems.isEmpty())
             throw new CartItemNotFoundException("Could not find any active product with userId=" + userId);
-        return mapper.toDto(cartItems);
+        return cartItemMapper.toDto(cartItems);
     }
 
     @Override
     public List<CartItemDTO> findByCustomerId(Long userId) {
-        List<CartItem> cartItems = repos.findByCustomer_Id(userId);
+        List<CartItem> cartItems = cartItemRepos.findByCustomer_Id(userId);
         if (cartItems == null || cartItems.isEmpty())
             throw new CartItemNotFoundException("Could not find all product with userId=" + userId);
-        return mapper.toDto(cartItems);
+        return cartItemMapper.toDto(cartItems);
     }
 
     @Override
@@ -45,5 +50,10 @@ public class CartServiceImpl implements CartService {
         return cart.stream()
                 .map(CartItemDTO::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    @Override
+    public void delete(List<CartItemDTO> cart) {
+        cart.forEach(item -> cartItemService.delete(item.getId()));
     }
 }
