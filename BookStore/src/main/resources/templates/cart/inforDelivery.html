@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông Tin Giao Hàng</title>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/inforDelivery.css}">
+    <link rel="stylesheet" th:href="@{/css/message.css}">
+</head>
+<body>
+<header>
+
+</header>
+<section id="content">
+    <div class="infor_delivery-content">
+        <div th:if="${successMessage}" id="successMessage" class="mess complete" role="alert">
+            <p th:text="${successMessage}"/>
+            <button class="close-mess">
+                <ion-icon name="close-circle-outline"></ion-icon>
+            </button>
+        </div>
+        <div th:if="${errorMessage}" id="errorMessage" class="mess error" role="alert">
+            <p th:text="${errorMessage}"/>
+            <button class="close-mess">
+                <ion-icon name="close-circle-outline"></ion-icon>
+            </button>
+        </div>
+        <div class="content_left">
+            <div class="bars">
+                <h3 class="bars_title">Thông tin giao hàng của bạn</h3>
+                <button class="btn-add" onclick="togglePopup()">
+                    <ion-icon name="add-circle-outline"></ion-icon>
+                </button>
+            </div>
+            <hr>
+            <th:block th:if="${not #lists.isEmpty(inforDeliveries)}">
+                <form id="select-infor-delivery" th:action="@{/methodPayment}" th:method="post">
+                    <input type="hidden" id="selectedInforDelivery" name="selectedInforDelivery">
+                    <div class="infor_delivery-list" th:each="infoDelivery: ${inforDeliveries}">
+                        <div class="infor_delivery-item">
+                            <input type="radio" name="inforDeliveryId" th:value="${infoDelivery.id}">
+                            <label class="infor_delivery_detail" onclick="setSelectedInforDelivery(this)">
+                            <span> <p th:text="${infoDelivery.receiverName}"/> | <p
+                                    th:text="${infoDelivery.phoneNumber}"/> </span>
+                                <span>Address:&nbsp;    <p th:text="${infoDelivery.province}"/>,&nbsp;
+                                <p th:text="${infoDelivery.district}"/>,&nbsp;<p
+                                            th:text="${infoDelivery.ward}"/> </span>
+                                <hr>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </th:block>
+            <div th:if="${#lists.isEmpty(inforDeliveries)}" class="empty-content">
+                <div class="empty-frame">
+                    <img class="empty-img" th:src="@{images/_empty.png}" alt="Empty">
+                </div>
+                <p class="empty-infor-delivery-text">Chưa có thông tin giao hàng! Hãy thêm thông tin giao hàng mới!</p>
+            </div>
+        </div>
+        <div class="content_right">
+            <h3 class="content_right-title">Chi tiết giỏ hàng</h3>
+            <hr>
+            <div class="product-list">
+                <th:block th:if="${not #lists.isEmpty(cart)}">
+                    <div class="product-list" th:each="carItem: ${cart}">
+                        <table class="product_details-container">
+                            <thead>
+                            <tr class="product-img-container">
+                                <th>
+                                    <div class="product_img-frame">
+                                        <a href="#">
+                                            <img class="product_img" alt="Product Image"
+                                                 th:src="@{images/temp-product.png}">
+                                        </a>
+                                    </div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody class="product_details">
+                            <tr class="product_details-left">
+                                <td class="product-title">
+                                    <a href="#">
+                                        <strong th:text="${carItem.product.item.title}"/>
+                                    </a>
+                                </td>
+                                <td class="product-current-price" th:text="${carItem.product.formatCurrentPrice}"/>
+                            </tr>
+                            <tr class="product_details-right">
+                                <td class="product-qty" th:text="${carItem.formatQty}"/>
+                                <td class="product-total-price" th:text="${carItem.formatTotalPrice}"/>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <hr>
+                    </div>
+                </th:block>
+            </div>
+            <div class="total-amount-container">
+                <h3>Tổng đơn:</h3>
+                <p th:text="${totalPrice}">
+            </div>
+            <hr>
+            <button class="btn-continue" onclick="submitForm('select-infor-delivery')">Tiếp tục</button>
+
+            <form th:action="@{/cart}" th:method="get">
+                <button class="btn-cancel">Trở lại</button>
+            </form>
+        </div>
+    </div>
+    <div class="overlay"></div>
+    <div class="infor_delivery-container">
+        <div class="infor_delivery_bars">
+            <h3>Thêm thông tin giao hàng</h3>
+            <button onclick="togglePopup()">
+                <ion-icon name="close-circle-outline"></ion-icon>
+            </button>
+        </div>
+        <form th:action="@{/inforDelivery/add}" class="infor_delivery-form" th:object="${newInforDelivery}"
+              th:method="post">
+            <div class="infor_delivery-input">
+                <label>Tên người nhận:</label>
+                <input type="text" placeholder="Họ và tên" id="receiverName" name="receiverName"
+                       th:field="*{receiverName}">
+                <label>Số điện thoại:</label>
+                <input type="text" placeholder="Số điện thoại" id="phoneNumber" name="phoneNumber"
+                       th:field="*{phoneNumber}"><br>
+                <label for="province">Tỉnh:</label>
+                <select id="province" name="province" th:field="*{province}">
+                    <option value="" disabled selected hidden class="defaultOption">Chọn tỉnh</option>
+                </select>
+                <label for="district">Huyện:</label>
+                <select id="district" name="district" th:field="*{district}">
+                    <option value="" disabled selected hidden class="defaultOption">Chọn huyện</option>
+                </select>
+                <label for="ward" selected disabled>Xã:</label>
+                <select id="ward" name="ward" th:field="*{ward}">
+                    <option value="" disabled selected hidden class="defaultOption">Chọn xã</option>
+                </select>
+            </div>
+            <button class="btn-add-infordelivery">Thêm</button>
+        </form>
+    </div>
+</section>
+<footer>
+
+</footer>
+<script th:src="@{/js/inforDelivery.js}"></script>
+<script th:src="@{/js/message.js}"></script>
+<script>
+
+</script>
+
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

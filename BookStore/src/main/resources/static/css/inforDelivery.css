@@ -1,0 +1,344 @@
+@import 'base/color.css';
+@import 'base/font.css';
+@import 'base/size.css';
+@import 'base/common.css';
+
+#content{
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.infor_delivery-content{
+    display: flex;
+    flex-direction: row;
+    min-height: 80vh;
+}
+
+.content_left,
+.content_right{
+    border-radius: 3vh;
+    padding: 10px;
+    height: fit-content;
+}
+
+.content_left{
+    margin:10px 5px 10px 30px;
+    background:
+            linear-gradient(var(--background-color) 0 0) padding-box,
+            linear-gradient(to bottom, var(--header-color), var(--header-color), var(--header-color), var(--footer-color)) border-box;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    width: var(--cart-content-left-width-size);
+    height: var(--cart-content-left-height-size);
+}
+
+.bars {
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+}
+
+.bars_title{
+    flex: 1;
+}
+
+.btn-add{
+    border: 0;
+    background-color: transparent;
+    size: 100px;
+    cursor: pointer;
+}
+
+.btn-add ion-icon{
+    font-size: 40px;
+    transition: color 0.3s;
+}
+
+.btn-add:hover{
+    size: 110px;
+}
+
+.btn-add:hover ion-icon{
+    font-size: 45px;
+    color: var(--header-color);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    display: none;
+}
+
+.infor_delivery_bars{
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
+.infor_delivery_bars h3{
+    flex: 1;
+}
+
+.infor_delivery_bars button{
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+}
+
+.infor_delivery_bars ion-icon{
+    font-size: 30px;
+    transition: color 0.3s;
+}
+
+.infor_delivery_bars button:hover ion-icon{
+    font-size: 35px;
+    color: var(--cancel-color);
+}
+
+.infor_delivery-container{
+    margin-top: 100px;
+    width: 800px;
+    height: auto;
+    position: fixed;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 2;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 15px;
+    border: 1px solid black;
+    display: none;
+}
+
+.infor_delivery-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.infor_delivery-form *{
+    margin: 3px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.infor_delivery-form label{
+    font-weight: bold;
+}
+
+.btn-add-infordelivery{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: var(--cart-button-continue-height-size);
+    border-radius: 15px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.btn-add-infordelivery:hover{
+    color: var(--content-color);
+    background-color: var(--header-color);
+    border: 1px solid var(--content-color);
+}
+
+.infor_delivery-item{
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+span {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.infor_delivery-item input[type="radio"]{
+    display: none;
+}
+
+.infor_delivery-item:hover label{
+    border: 2px solid var(--placeholder-color);
+}
+
+.infor_delivery-item:hover hr{
+    display: none;
+}
+
+.infor_delivery_detail{
+    border-radius: 15px;
+    padding: 10px;
+    padding-bottom: 0px;
+    cursor: pointer;
+}
+
+input[type="radio"]:checked ~ label {
+    border: 2px solid var(--header-color);
+}
+
+input[type="radio"]:checked,
+input[type="radio"]:checked ~ label hr{
+    display: none;
+}
+
+.infor_delivery_detail{
+    flex: 1;
+}
+
+select{
+    font-size: 1em;
+    border: 0;
+    border-bottom: 1px solid black;
+    background-color: transparent;
+}
+
+input[type="text"]{
+    font-size: 1em;
+    border: 0;
+    border-bottom: 1px solid black;
+    outline: none;
+    background-color: transparent;
+}
+
+/* Content - Right*/
+
+.content_right{
+    height: fit-content;
+    margin:10px 30px 10px 5px;
+    background:
+            linear-gradient(var(--background-color) 0 0) padding-box,
+            linear-gradient(to bottom, var(--header-color), var(--header-color), var(--header-color), var(--footer-color)) border-box;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    width: var(--cart-content-right-width-size);
+}
+
+.product-img-container{
+    width: 50px;
+    height: 50px;
+}
+
+.product_details-container{
+    width: var(--cart-product-item-width-size);
+    height: var(--cart-product-item-height-size);
+}
+
+table{
+    display: flex;
+    flex-direction: row;
+}
+
+table tbody{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+tbody tr{
+    display: flex;
+    flex-direction: column;
+}
+
+table td{
+    margin: 5px 2px 2px 5px;
+}
+
+.product_details{
+    height: 100px;
+}
+
+.product_details-left{
+    flex: 1;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* Product - Image */
+
+.product-img-container{
+    width: 100px;
+    height: 100px;
+
+}
+
+.product_img-frame{
+    width: 100px;
+    height: 100px;
+}
+
+.product_img{
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Product - Details */
+
+.product-title{
+    word-wrap: break-word;
+}
+
+.product-qty{
+    font-size: 1em;
+}
+
+.product-total-pice{
+    font-size: 1em;
+}
+
+.product_details-right{
+    display: flex;
+    text-align: right;
+    align-items: end;
+    justify-content: center;
+}
+
+.product-control {
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+}
+
+.total-amount-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.total-amount-container p{
+    font-size: 1.4em;
+    flex: 1;
+    text-align: right;
+}
+
+.content_right-title{
+    margin-top: 5px;
+}
+
+.btn-continue,
+.btn-cancel{
+    width: var(--cart-button-continue-width-size);
+    height: var(--cart-button-continue-height-size);
+    border-radius: 15px;
+    cursor: pointer;
+    margin: 2px;
+}
+
+.btn-continue:hover,
+.btn-cancel:hover {
+    color: var(--content-color);
+    background-color: var(--header-color);
+    border: 1px solid var(--content-color);
+    transition: color 0.3s;
+}
