@@ -1,6 +1,11 @@
 @import 'color.css';
 @import 'font.css';
 @import 'size.css';
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+*{
+    font-family: 'Trebuchet MS', sans-serif;
+}
 
 body{
     width: 100%;

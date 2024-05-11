@@ -23,7 +23,7 @@ public class InforDelivery {
     @Column
     private String district;
     @Column
-    private String street;
+    private String ward;
     @Column
     private String phoneNumber;
 

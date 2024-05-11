@@ -1,0 +1,222 @@
+@import 'base/color.css';
+@import 'base/font.css';
+@import 'base/size.css';
+@import 'base/common.css';
+
+#content{
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.method_payment-content{
+    display: flex;
+    flex-direction: row;
+    min-height: 80vh;
+}
+
+.content_left,
+.content_right{
+    border-radius: 3vh;
+    padding: 10px;
+    height: fit-content;
+}
+
+.content_left{
+    margin:10px 5px 10px 30px;
+    background:
+            linear-gradient(var(--background-color) 0 0) padding-box,
+            linear-gradient(to bottom, var(--header-color), var(--header-color), var(--header-color), var(--footer-color)) border-box;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    width: var(--cart-content-left-width-size);
+    height: var(--cart-content-left-height-size);
+}
+
+.payment-method-list{
+    width: 100%;
+    height: fit-content;
+    display: inline-flex;
+    flex-direction: row;
+}
+
+.payment-method-item{
+    flex: 1;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.payment-method-item label{
+    flex: 1;
+    border: 1px solid black;
+    border-radius: 15px;
+    margin: 10px;
+    display: flex;
+    cursor: pointer;
+    transition: border 0.3s;
+}
+
+.payment-method-item input{
+    display: none;
+}
+
+.payment-method-item img{
+    width: 80px;
+    height: auto;
+    display: block;
+    margin: 10px;
+}
+
+.payment-method-item p{
+    width: 100px;
+    height: 100%;
+    text-align: center;
+    flex: 1;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.payment-method-item input[type="radio"]:checked + label{
+    border: 2px solid var(--header-color);
+}
+
+.payment-method-item input[type="radio"]:checked + label p{
+    color: var(--header-color);
+}
+
+/* Content - Right*/
+
+.content_right{
+    height: fit-content;
+    margin:10px 30px 10px 5px;
+    background:
+            linear-gradient(var(--background-color) 0 0) padding-box,
+            linear-gradient(to bottom, var(--header-color), var(--header-color), var(--header-color), var(--footer-color)) border-box;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    width: var(--cart-content-right-width-size);
+}
+
+.product-img-container{
+    width: 50px;
+    height: 50px;
+}
+
+.product_details-container{
+    width: var(--cart-product-item-width-size);
+    height: var(--cart-product-item-height-size);
+}
+
+table{
+    display: flex;
+    flex-direction: row;
+}
+
+table tbody{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+tbody tr{
+    display: flex;
+    flex-direction: column;
+}
+
+table td{
+    margin: 5px 2px 2px 5px;
+}
+
+.product_details{
+    height: 100px;
+}
+
+.product_details-left{
+    flex: 1;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* Product - Image */
+
+.product-img-container{
+    width: 100px;
+    height: 100px;
+
+}
+
+.product_img-frame{
+    width: 100px;
+    height: 100px;
+}
+
+.product_img{
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Product - Details */
+
+.product-title{
+    word-wrap: break-word;
+}
+
+.product-qty{
+    font-size: 1em;
+}
+
+.product-total-pice{
+    font-size: 1em;
+}
+
+.product_details-right{
+    display: flex;
+    text-align: right;
+    align-items: end;
+    justify-content: center;
+}
+
+.product-control {
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+}
+
+.total-amount-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.total-amount-container p{
+    font-size: 1.4em;
+    flex: 1;
+    text-align: right;
+}
+
+.content_right-title{
+    margin-top: 5px;
+}
+
+.btn-continue,
+.btn-cancel{
+    width: var(--cart-button-continue-width-size);
+    height: var(--cart-button-continue-height-size);
+    border-radius: 15px;
+    cursor: pointer;
+    margin: 2px;
+}
+
+.btn-continue:hover,
+.btn-cancel:hover {
+    color: var(--content-color);
+    background-color: var(--header-color);
+    border: 1px solid var(--content-color);
+    transition: color 0.3s;
+}
