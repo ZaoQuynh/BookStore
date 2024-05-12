@@ -1,9 +1,7 @@
 package com.example.BookStore.service.impl;
 
 import com.example.BookStore.dto.InforDeliveryDTO;
-import com.example.BookStore.entity.CartItem;
 import com.example.BookStore.entity.InforDelivery;
-import com.example.BookStore.exception.CartItemNotFoundException;
 import com.example.BookStore.exception.InforDeliveryNotFoundException;
 import com.example.BookStore.mapper.InforDeliveryMapper;
 import com.example.BookStore.repos.InforDeliveryRepos;

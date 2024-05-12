@@ -1,5 +1,6 @@
 package com.example.BookStore.dto;
 
+import com.example.BookStore.entity.User;
 import com.example.BookStore.utility.Utils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +17,7 @@ public class CartItemDTO {
     private Long id;
     private ProductDTO product;
     private int qty;
+    private UserDTO customer;
 
     public String getFormatQty() {
         return "x" + String.valueOf(qty);

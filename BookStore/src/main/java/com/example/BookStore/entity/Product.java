@@ -43,6 +43,6 @@ public class Product {
     @ManyToMany(mappedBy = "favoriteProducts")
     private List<User> favoritedByUsers;
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.REMOVE)
-    private CartItem cartItem;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private List<CartItem> cartItem;
 }

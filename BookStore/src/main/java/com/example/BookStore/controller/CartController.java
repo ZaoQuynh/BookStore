@@ -7,7 +7,6 @@ import com.example.BookStore.exception.InforDeliveryNotFoundException;
 import com.example.BookStore.service.*;
 import com.example.BookStore.utility.Utils;
 import jakarta.servlet.http.HttpSession;
-import jdk.jshell.execution.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,6 +39,9 @@ public class CartController {
     @Autowired
     private CartItemService cartItemService;
 
+    @Autowired
+    private ProductService productService;
+
     @GetMapping("/cart")
     public String getCartPage(Model model) {
         List<CartItemDTO> cart = Collections.emptyList();;
@@ -57,18 +59,49 @@ public class CartController {
         return "cart/cart";
     }
 
+
+    @PostMapping("/cart/add")
+    public String addCartItem(@RequestParam("productId") Long productId,
+                              @RequestParam("productQty") String qtyStr,
+                              RedirectAttributes ra){
+        try {
+            ProductDTO product = productService.findById(productId);
+            UserDTO customer = userService.findById(userService.getCurrentUserId());
+            int newQty = Utils.toInt(qtyStr);
+
+            CartItemDTO cartItem = new CartItemDTO();
+            cartItem.setProduct(product);
+            cartItem.setCustomer(customer);
+            cartItem.setQty(cartItemService.checkValue(cartItem, newQty));
+
+            int bonusQty = cartService.addCart(cartItem);
+            if(bonusQty>0){
+                ra.addFlashAttribute("successMessage", "Đã thêm " + bonusQty + " sản phẩm vào giỏ hàng.");
+            } else if (bonusQty == 0){
+                ra.addFlashAttribute("errorMessage", "Sản phẩm trong giỏ hàng dã vượt quá số lượng trong kho.");
+            }
+        } catch (Exception e){
+            log.error(e.getMessage());
+            ra.addFlashAttribute("errorMessage", "Thêm sản phẩm vào giỏ hàng thất bại.");
+        }
+        return "redirect:/product/" + productId;
+    }
+
     @PostMapping("/cart/updateQuantity")
     public String updateQuantity(@RequestParam("id") Long cartItemId,
-                                 @RequestParam("qtyChange") String qtyChangeStr,
+                                 @RequestParam("qtyChangeInput") String qtyChangeStr,
+                                 @RequestParam("event") String event,
                                  RedirectAttributes ra) {
         try {
+            int newQty = Utils.toInt(qtyChangeStr);
             CartItemDTO cartItem = cartItemService.findById(cartItemId);
-            if (cartItem == null) {
-                ra.addFlashAttribute("errorMessage", "Sản phẩm không có trong giỏ hàng!");
-            } else {
-                cartItemService.updateQuantity(cartItem, qtyChangeStr);
-                ra.addFlashAttribute("successMessage", "Cập nhật sản phẩm thành công.");
-            }
+            if(newQty!=0)
+                if (cartItem == null) {
+                    ra.addFlashAttribute("errorMessage", "Sản phẩm không có trong giỏ hàng!");
+                } else {
+                    cartItemService.updateQuantity(cartItem, newQty, event);
+                    ra.addFlashAttribute("successMessage", "Cập nhật sản phẩm thành công.");
+                }
         } catch (CartItemNotFoundException e) {
             log.error("Error while updating cartItem with Id: {}", cartItemId, e);
             ra.addFlashAttribute("errorMessage", "Cập nhật sản phẩm thất bại.");

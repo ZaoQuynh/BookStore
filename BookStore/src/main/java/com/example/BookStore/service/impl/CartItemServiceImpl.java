@@ -12,8 +12,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class CartItemServiceImpl implements CartItemService {
     private final Logger log = LogManager.getLogger(CartItemServiceImpl.class);
@@ -24,6 +22,18 @@ public class CartItemServiceImpl implements CartItemService {
     private CartItemMapper mapper;
     @Autowired
     private ProductMapper productMapper;
+
+    @Override
+    public CartItemDTO add(CartItemDTO cartItemDTO) {
+        CartItem cartItem = mapper.toEntity(cartItemDTO);
+        try {
+            CartItem added = repos.save(cartItem);
+            return mapper.toDto(added);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return null;
+        }
+    }
 
     @Override
     public CartItemDTO update(CartItemDTO cartItemDTO) {
@@ -65,32 +75,38 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CartItemDTO fixNewQuantity(CartItemDTO cartItemDTO, String qtyStr) {
-        try {
-            int intQty = Integer.valueOf(qtyStr) + cartItemDTO.getQty();
-            int maxQty = cartItemDTO.getProduct().getStockQty();
-            if(intQty > maxQty)
-                intQty = maxQty;
-            if(intQty <= 0)
-                intQty = 0;
-            cartItemDTO.setQty(intQty);
-        } catch (Exception e){
-            log.error(e.getMessage());
-        }
-        return cartItemDTO;
+    public int checkValue(CartItemDTO cartItemDTO, int qty) {
+        int maxQty = cartItemDTO.getProduct().getStockQty();
+        if(qty > maxQty)
+            qty = maxQty;
+        if(qty <= 0)
+            qty = 0;
+        return qty;
     }
 
     @Override
-    public void updateQuantity(CartItemDTO cartItemDTO, String qtyStr) {
+    public CartItemDTO updateQuantity(CartItemDTO cartItemDTO, int newQty, String event) {
         try{
-            cartItemDTO = this.fixNewQuantity(cartItemDTO, qtyStr);
+            if(event.equals("button")){
+                newQty += cartItemDTO.getQty();
+            }
+            cartItemDTO.setQty(checkValue(cartItemDTO, newQty));
+
             if (cartItemDTO.getQty() == 0) {
                 this.delete(cartItemDTO.getId());
             } else {
-                this.update(cartItemDTO);
+                return this.update(cartItemDTO);
             }
         } catch (Exception e) {
             log.error(e.getMessage());
         }
+        return null;
+    }
+
+    @Override
+    public CartItemDTO findCartItemByProductAndCustomerId(Long productId, Long customerId) {
+        CartItem cartItem = repos
+                .findCartItemByProductAndCustomerId(productId, customerId);
+        return mapper.toDto(cartItem);
     }
 }

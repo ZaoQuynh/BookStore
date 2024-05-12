@@ -30,7 +30,7 @@ public class Order {
     @Embedded
     private Payment payment;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "inforDelivery_id")
     private InforDelivery inforDelivery;
 

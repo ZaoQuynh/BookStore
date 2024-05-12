@@ -18,4 +18,14 @@ public class Utils {
     public static boolean isNullOrEmpty(String string){
         return string == null || string.isEmpty() || string.isBlank();
     }
+
+    public static int toInt(String str){
+        try {
+            return Integer.parseInt(str);
+        } catch (NumberFormatException e) {
+            System.err.println("Error: Input string is not a valid integer.");
+            e.printStackTrace();
+            return 0;
+        }
+    }
 }

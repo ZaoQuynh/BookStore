@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết sản phẩm</title>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" th:href="@{/images/icon_address_bar.png}">
+    <link rel="stylesheet" th:href="@{/css/productDetails.css}">
+    <link rel="stylesheet" th:href="@{/css/message.css}">
+    <style>
+        .product-information-item h3{
+            flex: 1;
+            text-align: start;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<header>
+
+</header>
+<section id="content">
+    <div th:if="${successMessage}" id="successMessage" class="mess complete" role="alert">
+        <p th:text="${successMessage}"/>
+        <button class="close-mess">
+            <ion-icon name="close-circle-outline"></ion-icon>
+        </button>
+    </div>
+    <div th:if="${errorMessage}" id="errorMessage" class="mess error" role="alert">
+        <p th:text="${errorMessage}"/>
+        <button class="close-mess">
+            <ion-icon name="close-circle-outline"></ion-icon>
+        </button>
+    </div>
+    <div class="product-details-container">
+        <div class="product-information">
+            <h2 th:text="${product.item.title}"/>
+            <h4 th:text="${product.item.genre.description}"/>
+            <div class="product-information-item">
+                <button class="product-information-button">
+                    <div class="icon">
+                        <img th:src="@{/images/ic_author.png}" alt="icon">
+                    </div>
+                    <h3>Tác giả và xuất bản</h3>
+                    <ion-icon class="icon-show" name="add-outline"></ion-icon>
+                    <ion-icon class="icon-hide" name="remove-outline"></ion-icon>
+                </button>
+                <div class="product-information-details">
+                    <div><p>Tác giả:</p>
+                        <p th:text="${product.item.authors}"/></div>
+                    <br>
+                    <div><p>Nhà xuất bản:</p>
+                        <p th:text="${product.item.publisher}"/></div>
+                    <br>
+                    <div><p>Năm xuất bản:</p>
+                        <p th:text="${product.item.publisherYear}"/></div>
+                    <br>
+                </div>
+                <hr>
+            </div>
+            <div class="product-information-item">
+                <button class="product-information-button">
+                    <div class="icon">
+                        <img th:src="@{/images/ic_description.png}" alt="icon"/>
+                    </div>
+                    <h3>Mô tả</h3>
+                    <ion-icon class="icon-show" name="add-outline"></ion-icon>
+                    <ion-icon class="icon-hide" name="remove-outline"></ion-icon>
+                </button>
+                <div class="product-information-details">
+                    <p th:text="${product.item.description}">
+                </div>
+                <hr>
+            </div>
+            <button class="shop-container">
+                <div class="avatar-container">
+                    <img th:src="@{/images/ic_shop_avt.png}" alt="shop icon">
+                </div>
+                <h4 th:text="${product.seller.fullName}"/>
+                <ion-icon name="open-outline"></ion-icon>
+            </button>
+        </div>
+        <div class="product-img-container">
+            <div class="product-img-frame">
+                <img class="product-img" th:src="@{'/images/product/' + ${product.id} + '.png'}" alt="product img">
+            </div>
+            <div class="product-information-favorite">
+                <input id="heart" type="checkbox"/>
+                <label for="heart">❤</label>
+            </div>
+        </div>
+        <div class="product-information-for-sale">
+            <h2 class="curr-price">
+                <p>Giá:</p>
+                <p th:text="${product.formatCurrentPrice}"/>
+                <div class="percent-discount"><p th:text="${product.formatDiscountPercent}"/></div>
+            </h2>
+            <h4 class="original-price">Giá gốc:
+                <del th:text="${product.formatPrice}"/>
+            </h4>
+            <div class="quantity"><p>Kho: </p>
+                <p th:text="${product.stockQty}"/></div>
+            <div class="amount-purchased"><p>Đã bán:</p>
+                <p th:text="${amountPurchased}"/></div>
+            <form action="/cart/add" class="product-control" th:method="post">
+                <input type="hidden" name="productId" th:value="${product.id}">
+                <p>Số lượng: </p>
+                &nbsp;
+                <input class="input-quantity" type="text" name="productQty" value="1">
+                &nbsp;
+                <button class="btn-add-to-cart" onclick="submitForm('product-control')">Thêm vào giỏ hàng</button>
+            </form>
+
+        </div>
+    </div>
+    <div class="comments-container">
+        <hr>
+        <i>Bình luận:</i>
+        <th:block th:if="${not #lists.isEmpty(comments)}">
+            <div class="comment-list" th:each="comment: ${comments}">
+                <div class="comment-details">
+                    <h4 class="user-name" th:text="${comment.commentorName}"><
+                        <ion-icon name="checkmark-done-outline"></ion-icon>
+                    </h4>
+                    <p class="comment-content" th:text="${comment.commentText}"/>
+                    <div class="feedback-details">
+                        <ion-icon name="return-down-forward-outline"></ion-icon>
+                        <p class="feedback-content" th:text="${comment.feedbackText}"/>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+        </th:block>
+        <th:block th:if="${#lists.isEmpty(comments)}">
+            <div class="empty-content">
+                <img th:src="@{/images/ic_comment_empty.png}" alt="empty-icon">
+                <h4>Chưa có bình luận nào</h4>
+            </div>
+        </th:block>
+    </div>
+</section>
+<footer>
+</footer>
+<script th:src="@{/js/message.js}"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

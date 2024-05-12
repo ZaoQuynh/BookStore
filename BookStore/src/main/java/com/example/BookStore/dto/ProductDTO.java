@@ -25,7 +25,7 @@ public class ProductDTO {
     private boolean isBlocked;
     private boolean isDeleted;
     private List<User> favoritedByUsers;
-    private CartItem cartItem;
+    private List<CartItemDTO> cartItem;
 
     public BigDecimal getCurrentPrice() {
         if(!(this.isBlocked || this.isDeleted))
@@ -39,5 +39,10 @@ public class ProductDTO {
 
     public String getFormatCurrentPrice() {
         return Utils.formatCurrencyVietnamese(this.getCurrentPrice());
+    }
+
+    public String getFormatDiscountPercent() {
+        String discountPercentStr = String.valueOf(this.discountPercent * 100);
+        return "-" + discountPercentStr + "%";
     }
 }
