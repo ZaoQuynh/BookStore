@@ -7,8 +7,13 @@ $("#loginForm").submit(function(event) {
 		data: $(this).serialize(),
 		success: function(data) {
 			console.log(data)
-			if (data.message == null) {
-				window.location.replace("http://localhost:8080/hello");
+			if (data.message == null ) {
+				if(data.role === "CUSTOMER" || data.role === "SELLER"){
+					window.location.replace("http://localhost:8080/hello");
+				} else {
+					window.location.replace("http://localhost:8080/admin");
+				}
+
 			} else {
 				var errorMessage = $('<div class="error-message">' + data.message + '</div>');
 				$("#loginForm").prepend(errorMessage);

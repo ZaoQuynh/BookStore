@@ -44,4 +44,33 @@ public class EmailSender {
 	    mailSender.send(message);
 	     
 	}
+
+	public void sendLinkResetPass(User user, String siteURL, String email)
+			throws MessagingException, UnsupportedEncodingException {
+		String toAddress = user.getEmail();
+		String fromAddress = "tuine09@gmail.com";
+		String senderName = "Book Store";
+		String subject = "Create a new password";
+		String content = "Dear [[name]],<br>"
+				+ "Please click the link below to create new password:<br>"
+				+ "<h3><a href=\"[[URL]]\" target=\"_self\">Go to create new password</a></h3>"
+				+ "Thank you,<br>";
+
+		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+
+		helper.setFrom(fromAddress, senderName);
+		helper.setTo(toAddress);
+		helper.setSubject(subject);
+
+		content = content.replace("[[name]]", user.getFullName());
+		String verifyURL = siteURL + "/reset-password?email=" + email;
+
+		content = content.replace("[[URL]]", verifyURL);
+
+		helper.setText(content, true);
+
+		mailSender.send(message);
+
+	}
 }

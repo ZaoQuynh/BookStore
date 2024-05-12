@@ -9,4 +9,7 @@ public interface AuthService {
 	LoginResponse login(LoginRequest loginRequest);
 	RegisterResponse register(RegisterRequest registerRequest);
 	boolean verifyUser(String code);
+	boolean forgetPass(String email);
+	boolean resetPass(String password ,String email);
+
 }

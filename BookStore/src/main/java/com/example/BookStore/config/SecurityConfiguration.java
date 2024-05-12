@@ -36,16 +36,16 @@ public class SecurityConfiguration {
 		.authorizeHttpRequests(requests -> requests
 				// auth
 				.requestMatchers("/authentication","/login", "/logout",
-						"/register", "/verify", "/success-register",
-						"/notify-check-email").permitAll()
+						"/register", "/verify", "/success-register","/reset-password","/forgot-password",
+						"/notify-check-email","/notify-check-email-createNewPass").permitAll()
 				// home
-                .requestMatchers("/home").permitAll()
+                .requestMatchers("/").permitAll()
                 // frontend
                 .requestMatchers("/404", "/WEB-INF/jsp/**", "/static/**").permitAll()
                 .anyRequest().authenticated()
                 
         )
-		.logout((logout) -> logout.deleteCookies("accessToken", "refreshToken"))
+		.logout((logout) -> logout.deleteCookies("accessToken", "refreshToken","username"))
         .formLogin(form -> form
                 .loginPage("/login")
                 .permitAll()

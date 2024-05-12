@@ -3,7 +3,6 @@ package com.example.BookStore.builder;
 import java.sql.Date;
 
 import com.example.BookStore.dto.RegisterRequest;
-import com.example.BookStore.entity.User;
 
 public class RegisterRequestBuilder {
 	private RegisterRequest registerRequest;
@@ -26,7 +25,7 @@ public class RegisterRequestBuilder {
 		return this;
 	} 
 	
-	public RegisterRequestBuilder gender(User.EGender gender) {
+	public RegisterRequestBuilder gender(String gender) {
 		this.registerRequest.setGender(gender);
 		return this;
 	}
@@ -41,7 +40,7 @@ public class RegisterRequestBuilder {
 		return this;
 	}
 	
-	public RegisterRequestBuilder role(User.ERole role) {
+	public RegisterRequestBuilder role(String role) {
 		this.registerRequest.setRole(role);
 		return this;
 	}

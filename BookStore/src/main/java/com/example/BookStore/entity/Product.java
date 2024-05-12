@@ -21,8 +21,19 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Embedded
-    private Book item;
+    @Column
+    private String title;
+    @Column
+    private String authors;
+    @Column
+    private int publisherYear;
+    @Column
+    private Book.EGenre genre;
+    @Column
+    private String description;
+
+    @Column
+    private String img;
 
     @Column
     private BigDecimal price;

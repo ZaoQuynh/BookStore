@@ -1,10 +1,7 @@
 package com.example.BookStore.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Collection;
 import java.util.Date;
@@ -19,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "users")
 public class User implements UserDetails {
 	@Id
@@ -31,13 +29,13 @@ public class User implements UserDetails {
 	@Column
 	private String fullName;
 	@Column
-	private EGender gender;
+	private String gender;
 	@Column
 	private Date birthday;
 	@Column
 	private String email;
 	@Column
-	private ERole role;
+	private String role;
 	@Column
 	private boolean isEnabled;
 	@Column
@@ -58,17 +56,10 @@ public class User implements UserDetails {
 	@JoinTable(joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
 	private List<Product> favoriteProducts;
 
-	public enum EGender {
-		MALE, FEMALE
-	}
-
-	public enum ERole {
-		CUSTOMER, SELLER, ADMIN
-	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority(role.name()));
+		return List.of(new SimpleGrantedAuthority(role));
 	}
 
 	@Override
@@ -95,4 +86,14 @@ public class User implements UserDetails {
 	public boolean isEnabled() {
 		return this.isEnabled;
 	}
+
+	public enum EGender{
+		MALE, FEMALE
+	}
+
+	public enum ERole{
+		CUSTOMER, SELLER, ADMIN
+	}
+
+
 }

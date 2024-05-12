@@ -19,7 +19,7 @@ public class Book {
     @Column
     private int publisherYear;
     @Column
-    private  EGenre genre;
+    private EGenre genre;
     @Column
     private String description;
 
