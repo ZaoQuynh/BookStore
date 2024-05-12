@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Yêu thích</title>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" th:href="@{/images/icon_address_bar.png}">
+    <link rel="stylesheet" th:href="@{/css/productManage.css}">
+    <link rel="stylesheet" th:href="@{/css/message.css}">
+    <style>
+        .product-information-item h3{
+            flex: 1;
+            text-align: start;
+            padding: 10px;
+        }
+
+
+
+        .favorite-item h4{
+            text-align: center;
+            margin: 2px;
+            width: 170px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            transition: color 0.3s;
+            text-decoration: none;
+        }
+
+        .favorite-item p{
+            margin: 2px;
+            transition: color 0.3s;
+            text-decoration: none;
+        }
+
+        .favorite-item:hover {
+            background: var(--header-color);
+        }
+    </style>
+</head>
+<body>
+<header>
+
+</header>
+<section id="content">
+    <div class="favorites-manage-container">
+        <h2 class="title">My Favorites</h2>
+        <th:block th:if="${not #lists.isEmpty(favorites)}">
+            <div class="favorites-list" th:each="product: ${favorites}">
+                <a class="favorite-item"
+                   th:href="@{'/product/' + ${product.id}}">
+                    <div class="img-frame">
+                        <img th:src="@{'/images/product/' + ${product.id} + '.png'}" alt="Image Product">
+                    </div>
+                    <h4 th:text="${product.item.title}"/>
+                    <p th:text="${product.formatCurrentPrice}"/>
+                    <p class="overlay-text" th:text="${product.formatDiscountPercent}"/>
+                </a>
+            </div>
+        </th:block>
+        <th:block th:if="${#lists.isEmpty(favorites)}">
+            <div class="empty-content">
+                <img th:src="@{/images/_empty.png}" alt="icon empty">
+                <p>Không có sản phẩm yêu thích</p>
+                <a class="return-button" th:text="'Tiếp tục mua hàng'" th:href="@{/home}"/>
+            </div>
+        </th:block>
+    </div>
+</section>
+<footer>
+</footer>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

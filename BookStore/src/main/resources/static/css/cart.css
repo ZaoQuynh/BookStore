@@ -104,11 +104,17 @@ table td {
 .product_img-frame {
     width: 130px;
     height: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
 .product_img {
-    width: 100%;
-    height: auto;
+    height: 100%;
+    width: auto;
+    max-width: 130px;
+    max-height: 130px;
     display: block;
 }
 
@@ -285,4 +291,21 @@ table td {
     background-color: var(--header-color);
     border: 1px solid var(--content-color);
     transition: color 0.3s;
+}
+
+
+.return-button{
+    text-decoration: none;
+    padding: 10px;
+    background: white;
+    border: 1px solid black;
+    border-radius: 15px;
+    color: black;
+    transition: color 0.3s;
+}
+
+.return-button:hover{
+    color: var(--content-color);
+    background-color: var(--header-color);
+    border: 1px solid var(--content-color);
 }

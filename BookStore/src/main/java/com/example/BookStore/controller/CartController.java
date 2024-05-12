@@ -81,7 +81,7 @@ public class CartController {
             if(bonusQty>0){
                 ra.addFlashAttribute("successMessage", "Đã thêm " + bonusQty + " sản phẩm vào giỏ hàng.");
             } else if (bonusQty == 0){
-                ra.addFlashAttribute("errorMessage", "Sản phẩm trong giỏ hàng dã vượt quá số lượng trong kho.");
+                ra.addFlashAttribute("errorMessage", "Sản phẩm trong giỏ hàng sẽ vượt quá số lượng trong kho.");
             }
         } catch (Exception e){
             log.error(e.getMessage());

@@ -3,6 +3,7 @@ package com.example.BookStore.service.impl;
 import com.example.BookStore.dto.UserDTO;
 import com.example.BookStore.entity.User;
 import com.example.BookStore.exception.UserNotFoundException;
+import com.example.BookStore.mapper.ProductMapper;
 import com.example.BookStore.mapper.UserMapper;
 import com.example.BookStore.repos.UserRepos;
 import com.example.BookStore.service.UserService;
@@ -21,10 +22,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper mapper;
 
+    @Autowired
+    private ProductMapper productMapper;
+
     @Override
     public Long getCurrentUserId() {
         try {
-            return Long.valueOf(1);
+            return 1L;
         } catch (Exception e) {
             log.error(e.getMessage());
             return null;

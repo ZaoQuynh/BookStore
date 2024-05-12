@@ -56,8 +56,8 @@ public class CartServiceImpl implements CartService {
     @Override
     public void delete(List<CartItemDTO> cart) {
         cart.forEach(item -> {
-            cartItemService.delete(item.getId());
             productService.updateStockQty(item.getProduct(), item.getQty());
+            cartItemService.delete(item.getId());
         });
     }
 

@@ -39,9 +39,9 @@
                             <tr class="product-img-container">
                                 <th>
                                     <div class="product_img-frame">
-                                        <a href="#">
+                                        <a th:href="@{'/product/' + ${cartItem.product.id}}">
                                             <img class="product_img" alt="Product Image"
-                                                 th:src="@{images/temp-product.png}">
+                                                 th:src="@{'/images/product/' + ${cartItem.product.id} + '.png'}">
                                         </a>
                                     </div>
                                 </th>
@@ -50,7 +50,7 @@
                             <tbody class="product_details">
                             <tr class="product_details-left">
                                 <td class="product-title">
-                                    <a href="#">
+                                    <a th:href="@{'/product/' + ${cartItem.product.id}}">
                                         <strong th:text="${cartItem.product.item.title}"/>
                                     </a>
                                 </td>
@@ -136,7 +136,7 @@
                     <img class="empty-cart-img" th:src="@{images/cart-empty.png}">
                 </div>
                 <p class="empty-cart-text">Giỏ hàng của bạn đang rỗng! Hãy cùng mua hàng nào!</p>
-                <button>Tiếp tục mua hàng</button>
+                <a class="return-button" th:text="'Tiếp tục mua hàng'" th:href="@{/home}"/>
             </div>
         </div>
     </div>
