@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -29,4 +31,8 @@ public class InforDelivery {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    @OneToMany
+    private List<Order> orders;
+
 }

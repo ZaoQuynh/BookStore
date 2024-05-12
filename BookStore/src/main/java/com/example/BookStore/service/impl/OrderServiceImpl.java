@@ -10,10 +10,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -40,29 +38,23 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDTO> convertCartToOrder(List<CartItemDTO> cart) {
-        List<OrderDTO> orders = new ArrayList<>(Collections.emptyList());
+        Map<UserDTO, List<OrderItemDTO>> ordersMap = cart.stream()
+                .collect(Collectors.groupingBy(item -> item.getProduct().getSeller(),
+                        Collectors.mapping(item -> {
+                            OrderItemDTO orderItem = new OrderItemDTO();
+                            orderItem.setQty(item.getQty());
+                            orderItem.setCurrPrice(item.getProduct().getCurrentPrice());
+                            orderItem.setProduct(item.getProduct());
+                            return orderItem;
+                        }, Collectors.toList())));
 
-        List<UserDTO> sellers = cart.stream()
-                .map(CartItemDTO::getProduct)
-                .map(ProductDTO::getSeller)
-                .distinct()
-                .toList();
-
-        sellers.forEach(seller -> {
-            List<OrderItemDTO> orderItems = cart.stream().filter(item -> item.getProduct().getSeller()==seller)
-                    .map(item -> {
-                        OrderItemDTO orderItem = new OrderItemDTO();
-                        orderItem.setQty(item.getQty());
-                        orderItem.setCurrPrice(item.getProduct().getCurrentPrice());
-                        orderItem.setProduct(item.getProduct());
-                        return orderItem;
-                    }).toList();
+        List<OrderDTO> orders = new ArrayList<>();
+        ordersMap.forEach((seller, orderItems) -> {
             OrderDTO order = new OrderDTO();
             order.setOrderItems(orderItems);
             order.setOrderStatus(Order.EOrderStatus.PENDING);
             orders.add(order);
         });
-
         return orders;
     }
 }

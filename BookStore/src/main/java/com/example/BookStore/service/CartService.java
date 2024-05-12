@@ -10,4 +10,5 @@ public interface CartService {
     List<CartItemDTO> findByCustomerId(Long userId);
     BigDecimal totalPriceOfCart(List<CartItemDTO> cart);
     void delete(List<CartItemDTO> cart);
+    int addCart(CartItemDTO cartItemDTO);
 }

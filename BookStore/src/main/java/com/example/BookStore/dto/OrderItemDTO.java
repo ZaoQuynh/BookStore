@@ -1,8 +1,6 @@
 package com.example.BookStore.dto;
 
-import com.example.BookStore.entity.Comment;
 import com.example.BookStore.entity.Order;
-import com.example.BookStore.entity.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +16,6 @@ public class OrderItemDTO {
     private ProductDTO product;
     private int qty;
     private BigDecimal currPrice;
-    private Comment comment;
+    private CommentDTO comment;
     private Order order;
 }

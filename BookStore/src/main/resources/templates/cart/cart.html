@@ -10,42 +10,6 @@
     <link rel="icon" th:href="@{/images/icon_address_bar.png}">
     <link rel="stylesheet" th:href="@{/css/cart.css}">
     <link rel="stylesheet" th:href="@{/css/message.css}">
-    <style>
-
-        #content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .content-cart{
-            display: flex;
-            flex-direction: column;
-            min-height: 80vh;
-            justify-content: center;
-            align-items: center;
-        }
-
-        h1 {
-            font-size: 2.5em;
-        }
-
-        .cart-container {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            min-height: 60vh;
-        }
-
-        .content-title {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--header-color);
-        }
-
-    </style>
 </head>
 <body>
 <header>
@@ -98,19 +62,22 @@
                                         </th:block>
                                     </td>
                                     <td class="product_custom-number" style="height: 100%;">
-                                        <form th:action="@{/cart/updateQuantity}" class="product-control"
-                                              th:method="post">
-                                            <input type="hidden" name="id" th:value="${cartItem.id}"/>
-                                            <button class="button-minus" name="qtyChange" value="-1">
+                                        <div class="product-control">
+                                            <form th:action="@{/cart/updateQuantity}"
+                                                  th:method="post" id="product-control">
+                                                <input type="hidden" name="id" th:value="${cartItem.id}"/>
+                                                <input type="hidden" name="qtyChangeInput" id="qtyChangeInput"/>
+                                                <input type="hidden" name="event" id="event"/>
+                                            </form>
+                                            <button class="button-minus" onclick="submitForm('product-control', -1, 'button')">
                                                 <ion-icon name="remove-outline"></ion-icon>
                                             </button>
-                                            <input class="input-quantity" type="text" name="productNumber"
-                                                   th:value="${cartItem.qty}" min="0"
-                                                   th:max="${cartItem.product.stockQty}">
-                                            <button class="button-add" name="qtyChange" value="1">
+                                            <input type="hidden" name="qty" id="qty" th:value="${cartItem.qty}"/>
+                                            <input class="input-quantity" type="text" id="inputQuantity" onchange="submitForm('product-control', this.value, '')"/>
+                                            <button class="button-add" onclick="submitForm('product-control', 1, 'button')">
                                                 <ion-icon name="add-outline"></ion-icon>
                                             </button>
-                                        </form>
+                                        </div>
                                     </td>
                                 </th:block>
 
@@ -144,9 +111,7 @@
                     <h3 class="content_right-title">Thông tin:</h3>
                     <hr>
                     <b>Chính sách giao hàng:</b>
-                    <li>Phí giao hàng 30.000đ đối với ngoại thành, 15.000đ đối với khu vực thành phố Hồ Chí Minh.
-                    </li>
-                    <li>Miễn phí giao hàng cho đơn từ 500.000đ.</li>
+                    <li>Miễn phí giao hàng.</li>
                     <li>Miễn phí hoàn trả nếu có lỗi.</li>
                     <hr>
                     <div class="total-amount-container">
@@ -173,7 +138,15 @@
 <footer>
 
 </footer>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var hiddenQty = document.querySelector('[name="qty"]');
+        var inputQuantity = document.querySelector('.input-quantity');
+        inputQuantity.value = hiddenQty.value;
+    });
+</script>
 <script th:src="@{/js/message.js}"></script>
+<script th:src="@{/js/cart.js}"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
