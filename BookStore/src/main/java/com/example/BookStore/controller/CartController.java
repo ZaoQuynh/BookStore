@@ -45,17 +45,20 @@ public class CartController {
     @GetMapping("/cart")
     public String getCartPage(Model model) {
         List<CartItemDTO> cart = Collections.emptyList();;
+        List<CartItemDTO> activeCart = Collections.emptyList();;
         Long userId = userService.getCurrentUserId();
         try {
             cart = cartService.findByCustomerId(userId);
+            activeCart = cartService.findActiveByCustomerId(userId);
         } catch (CartItemNotFoundException e) {
             log.error("Error while fetching cart with userId: {}", userId, e);
         }
 
         model.addAttribute("cart", cart);
+        model.addAttribute("activeCart", activeCart);
         model.addAttribute("totalPrice",
                 Utils.formatCurrencyVietnamese(
-                        cartService.totalPriceOfCart(cart)));
+                        cartService.totalPriceOfCart(activeCart)));
         return "cart/cart";
     }
 

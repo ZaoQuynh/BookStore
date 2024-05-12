@@ -13,7 +13,11 @@ public interface CartItemRepos extends JpaRepository<CartItem, Long> {
     List<CartItem> findByCustomer_Id(Long userId);
     Long countById(Long id);
 
-    @Query("SELECT e FROM CartItem e WHERE e.customer.id = ?1 AND e.product.isDeleted = false AND e.product.isBlocked = false")
+    @Query("SELECT e FROM CartItem e WHERE e.customer.id = ?1 " +
+            "AND e.product.isDeleted = false " +
+            "AND e.product.isBlocked = false " +
+            "AND e.product.stockQty>0" +
+            "AND e.qty <= e.product.stockQty")
     List<CartItem> findActiveByCustomerId(Long userId);
 
     @Query("SELECT e FROM CartItem e WHERE e.product.id = ?1 AND e.customer.id =?2")

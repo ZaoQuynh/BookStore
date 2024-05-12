@@ -54,12 +54,16 @@
                                         <strong th:text="${cartItem.product.item.title}"/>
                                     </a>
                                 </td>
-                                <th:block th:if="${not (cartItem.product.isBlocked || cartItem.product.isDeleted)}">
+                                <th:block th:if="${not (cartItem.product.isBlocked || cartItem.product.isDeleted || cartItem.product.stockQty<=0)}">
                                     <td class="product-current-price" th:text="${cartItem.product.formatCurrentPrice}"/>
                                     <td class="product-price" style="font-size: 0.75em;">
                                         <th:block th:if="${cartItem.product.discountPercent ne 0}">
                                             <del th:text="${cartItem.product.formatPrice}"/>
                                         </th:block>
+                                        <div style="display: flex; flex-direction: row; align-items: center;">
+                                            <p>Còn lại:&nbsp;</p>
+                                            <p th:text="${cartItem.product.stockQty}"/>
+                                        </div>
                                     </td>
                                     <td class="product_custom-number" style="height: 100%;">
                                         <div class="product-control">
@@ -81,17 +85,20 @@
                                     </td>
                                 </th:block>
 
-                                <th:block th:if="${(cartItem.product.isBlocked || cartItem.product.isDeleted)}">
+                                <th:block th:if="${(cartItem.product.isBlocked || cartItem.product.isDeleted || cartItem.product.stockQty<=0)}">
                                     <td class="product-current-price" th:text="${cartItem.product.formatPrice}"/>
                                 </th:block>
                             </tr>
                             <tr class="product_details-right">
-                                <th:block th:if="${not (cartItem.product.isBlocked || cartItem.product.isDeleted)}">
+                                <th:block th:if="${not (cartItem.product.isBlocked || cartItem.product.isDeleted || cartItem.product.stockQty<=0)}">
                                     <td class="product-qty" th:text="${cartItem.formatQty}"/>
                                     <td class="product-total-price" th:text="${cartItem.formatTotalPrice}"/>
                                 </th:block>
-                                <th:block th:if="${(cartItem.product.isBlocked || cartItem.product.isDeleted)}">
+                                <th:block th:if="${(cartItem.product.isBlocked || cartItem.product.isDeleted || cartItem.product.stockQty<=0)}">
                                     <td style="color: red;">Sản phẩm không tổn tại</td>
+                                </th:block>
+                                <th:block th:if="${(cartItem.qty > cartItem.product.stockQty)}">
+                                    <td style="color: red;">Sản phẩm không còn đủ hàng</td>
                                 </th:block>
                                 <td class="product-control" style="height: 100%;">
                                     <form th:action="@{/cart/delete}" th:method="post">
@@ -119,7 +126,7 @@
                         <p th:text="${totalPrice}">
                     </div>
                     <hr>
-                    <form th:action="@{/inforDelivery}" th:method="get">
+                    <form th:action="@{/inforDelivery}" th:method="get" th:if="${not #lists.isEmpty(activeCart)}">
                         <button class="continue-button">Tiếp tục</button>
                     </form>
                 </div>
