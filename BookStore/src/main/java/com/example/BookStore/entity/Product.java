@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -41,7 +43,7 @@ public class Product {
     private boolean isDeleted;
 
     @ManyToMany(mappedBy = "favoriteProducts")
-    private List<User> favoritedByUsers;
+    private Set<User> favoriteByUsers = new HashSet<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
     private List<CartItem> cartItem;

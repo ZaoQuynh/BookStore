@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -40,21 +42,17 @@ public class User {
     @Column
     private boolean isDeleted;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user")
     private List<InforDelivery> inforDeliveries;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "customer")
     private List<CartItem> cartItems;
 
-    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "seller")
     private List<Product> products;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<Product> favoriteProducts;
+    @ManyToMany
+    private Set<Product> favoriteProducts = new HashSet<>();
 
     public enum EGender{
         MALE, FEMALE
