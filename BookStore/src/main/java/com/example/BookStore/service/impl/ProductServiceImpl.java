@@ -1,62 +1,63 @@
 package com.example.BookStore.service.impl;
 
-import com.example.BookStore.dto.ProductDTO;
 import com.example.BookStore.entity.Product;
-import com.example.BookStore.exception.CartItemNotFoundException;
-import com.example.BookStore.exception.ProductNotFoundException;
-import com.example.BookStore.mapper.ProductMapper;
 import com.example.BookStore.repos.ProductRepos;
 import com.example.BookStore.service.ProductService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-    private final Logger log = LogManager.getLogger(ProductServiceImpl.class);
 
-    @Autowired
-    private ProductRepos repos;
-
-    @Autowired
-    private ProductMapper mapper;
+    private final ProductRepos productRepos;
 
     @Override
-    public ProductDTO findById(Long id) {
-        Product product = repos
-                .findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Could not find any product with Id=" + id));
-        return mapper.toDto(product);
+    public List<Product> getsAllProducts() {
+
+        return productRepos.findAll();
     }
 
     @Override
-    public void updateStockQty(ProductDTO product, int qtyPurchased) {
-        int stockQty = product.getStockQty();
-        stockQty-=qtyPurchased;
-        product.setStockQty(stockQty);
-        this.update(product);
+    public List<Product> searchProducts(String query) {
+        // Tìm kiếm người dùng dựa trên từ khóa 'query'
+        List<Product> allProducts = productRepos.findAll();
+        List<Product> searchResults = allProducts.stream()
+                .filter(Product -> Product.getTitle().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+        return searchResults;
     }
 
     @Override
-    public void update(ProductDTO productDTO) {
-        Product product = mapper.toEntity(productDTO);
-        Product theProduct = repos
-                .findById(product.getId())
-                .orElseThrow(() -> new CartItemNotFoundException("Could not find any product with Id=" + productDTO.getId()));
+    public void blockProduct(Long id) {
+        Product product = productRepos.findById(id).orElseThrow(() -> new UsernameNotFoundException("Product not found with id: " + id));
+        product.setBlocked(true);
+        productRepos.save(product);
+    }
 
-        theProduct.setItem(product.getItem());
-        theProduct.setStockQty(product.getStockQty());
-        theProduct.setBlocked(product.isBlocked());
-        theProduct.setDeleted(product.isDeleted());
-        theProduct.setDiscountPercent(product.getDiscountPercent());
-        theProduct.setPrice(product.getPrice());
+    @Override
+    public void unblockProduct(Long id) {
+        Product product = productRepos.findById(id).orElseThrow(() -> new UsernameNotFoundException("Product not found with id: " + id));
+        product.setBlocked(false);
+        productRepos.save(product);
+    }
 
-        try{
-            Product updated = repos.save(theProduct);
-            mapper.toDto(updated);
-        } catch (Exception e){
-            log.error(e.getMessage());
-        }
+    @Override
+    public void deletedProduct(Long id) {
+        Product product = productRepos.findById(id).orElseThrow(() -> new UsernameNotFoundException("Product not found with id: " + id));
+        product.setDeleted(true);
+        productRepos.save(product);
+    }
+
+    @Override
+    public void unDeletedProduct(Long id) {
+        Product product = productRepos.findById(id).orElseThrow(() -> new UsernameNotFoundException("Product not found with id: " + id));
+        product.setDeleted(false);
+        productRepos.save(product);
     }
 }

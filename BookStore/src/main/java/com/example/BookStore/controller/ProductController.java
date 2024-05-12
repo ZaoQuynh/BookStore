@@ -1,48 +1,36 @@
 package com.example.BookStore.controller;
 
-import com.example.BookStore.dto.CommentDTO;
-import com.example.BookStore.dto.ProductDTO;
-import com.example.BookStore.exception.ProductNotFoundException;
-import com.example.BookStore.service.OrderItemService;
-import com.example.BookStore.service.OrderService;
+import com.example.BookStore.entity.Product;
+import com.example.BookStore.entity.User;
+import com.example.BookStore.repos.ProductRepos;
 import com.example.BookStore.service.ProductService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Collections;
 import java.util.List;
 
-@Controller
-@RequestMapping("/product")
+@Controller@RequiredArgsConstructor
+
 public class ProductController {
-    private final Logger log = LogManager.getLogger(ProductController.class);
 
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private OrderItemService orderItemService;
+    private final ProductService productService;
 
-    @GetMapping("/{productId}")
-    public String getProduct(@PathVariable("productId") Long productId, Model model) {
-        ProductDTO product = new ProductDTO();
-        int amountPurchased = 0;
-        List<CommentDTO> comments = Collections.emptyList();
-        try{
-            product = productService.findById(productId);
-            amountPurchased = orderItemService.countQtyProductByProductId(productId);
-            comments = orderItemService.findCommentByProductId(productId);
-        } catch (ProductNotFoundException e){
-            log.error("Error while fetching product with Id: {}", productId, e);
-        }
-        model.addAttribute("product", product);
-        model.addAttribute("amountPurchased", amountPurchased);
-        model.addAttribute("comments", comments);
-        return "/productDetails";
+    @GetMapping("/products")
+    public String Products(Model model) {
+        model.addAttribute("products", productService.getsAllProducts());
+        return "/products";
     }
+
+    @GetMapping("/products/search")
+    public String searchProduct(@RequestParam("query") String query, Model model) {
+        List<Product> searchResults = productService.searchProducts(query);
+        model.addAttribute("products", searchResults);
+        model.addAttribute("query", query);
+
+        return "/search";
+    }
+
 }

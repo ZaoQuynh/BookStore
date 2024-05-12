@@ -23,16 +23,14 @@ public class Order {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems;
+
     @Column
     private Date orderDate;
     @Column
     private EOrderStatus orderStatus;
+
     @Embedded
     private Payment payment;
-
-    @ManyToOne
-    @JoinColumn(name = "inforDelivery_id")
-    private InforDelivery inforDelivery;
 
     public enum EOrderStatus{
         PENDING, PROCESSING, SHIPPED, DELIVERED, RETURN, CANCELLED, COMPLETED

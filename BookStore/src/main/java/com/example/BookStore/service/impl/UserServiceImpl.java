@@ -1,41 +1,83 @@
 package com.example.BookStore.service.impl;
 
-import com.example.BookStore.dto.UserDTO;
 import com.example.BookStore.entity.User;
-import com.example.BookStore.exception.UserNotFoundException;
-import com.example.BookStore.mapper.UserMapper;
-import com.example.BookStore.repos.UserRepos;
-import com.example.BookStore.service.UserService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.example.BookStore.repos.UserRepository;
+import com.example.BookStore.service.UserService;
+
+import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
-public class UserServiceImpl implements UserService {
-    private final Logger log = LogManager.getLogger(UserServiceImpl.class);
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService{
+	private final UserRepository userRepository;
+	@Override
+	public UserDetailsService userDetailsService() {
+		return new UserDetailsService() {
+			@Override
+			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+				return userRepository.findByUsername(username)
+						.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+			}
+		};
+	}
 
-    @Autowired
-    private UserRepos repos;
+	@Override
+	public User checkUserByEmail(String email) {
 
-    @Autowired
-    private UserMapper mapper;
+		return userRepository.findByEmail(email)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+	}
 
-    @Override
-    public Long getCurrentUserId() {
-        try {
-            return Long.valueOf(1);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return null;
-        }
-    }
+	@Override
+	public List<User> gatUsers() {
+		return userRepository.findAll();
+	}
 
-    @Override
-    public UserDTO findById(Long id) {
-        User user = repos
-                .findById(id)
-                .orElseThrow(() -> new UserNotFoundException("Could not find any user with Id=" + id));
-        return mapper.toDto(user);
-    }
+	@Override
+	public void blockUser(Long userId) {
+		User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + userId));
+		user.setBlocked(true);
+		userRepository.save(user);
+	}
+
+	@Override
+	public void unblockUser(Long userId) {
+		User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + userId));
+		user.setBlocked(false);
+		userRepository.save(user);
+	}
+
+	@Override
+	public void deletedUser(Long userId) {
+		User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + userId));
+		user.setDeleted(true);
+		userRepository.save(user);
+	}
+
+	@Override
+	public void unDeletedUser(Long userId) {
+		User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + userId));
+		user.setDeleted(false);
+		userRepository.save(user);
+	}
+
+	@Override
+	public List<User> searchUsers(String query) {
+		// Tìm kiếm người dùng dựa trên từ khóa 'query'
+		List<User> allUsers = userRepository.findAll();
+		List<User> searchResults = allUsers.stream()
+				.filter(user -> user.getUsername().toLowerCase().contains(query.toLowerCase()))
+				.collect(Collectors.toList());
+		return searchResults;
+	}
+
+
 }
