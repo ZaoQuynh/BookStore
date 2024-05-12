@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  mysql:
+    container_name: mysql-book-store-container
+    image: mysql:latest
+    restart: always
+    ports:
+      - "3307:3306"
+    networks:
+      - networkbookstore
+
+  book-store-app:
+    container_name: app-book-store-container
+    image: book-store-image
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - networkbookstore
+
+networks:
+  networkbookstore:
+    driver: bridge
