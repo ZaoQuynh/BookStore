@@ -79,8 +79,8 @@ public class CartItemServiceImpl implements CartItemService {
         int maxQty = cartItemDTO.getProduct().getStockQty();
         if(qty > maxQty)
             qty = maxQty;
-        if(qty <= 0)
-            qty = 0;
+        if(qty < 0)
+            qty = 1;
         return qty;
     }
 
