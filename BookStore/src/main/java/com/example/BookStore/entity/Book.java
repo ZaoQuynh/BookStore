@@ -17,6 +17,8 @@ public class Book {
     @Column
     private String authors;
     @Column
+    private String publisher;
+    @Column
     private int publisherYear;
     @Column
     private  EGenre genre;

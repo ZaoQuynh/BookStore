@@ -45,4 +45,6 @@ public class Product {
 
     @OneToOne(mappedBy = "product", cascade = CascadeType.REMOVE)
     private CartItem cartItem;
+
+
 }
