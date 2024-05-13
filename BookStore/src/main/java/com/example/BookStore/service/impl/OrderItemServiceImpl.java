@@ -24,7 +24,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public int countQtyProductByProductId(Long productId) {
-        List<OrderItem> orderItems = repos.countQtyProductByProductId(productId);
+        List<OrderItem> orderItems = repos.getOrderItemByProductId(productId);
         AtomicInteger count = new AtomicInteger();
         orderItems.forEach(o -> count.addAndGet(o.getQty()));
         return count.get();
@@ -32,11 +32,11 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public List<CommentDTO> findCommentByProductId(Long productId) {
-        List<OrderItem> orderItems = repos.countQtyProductByProductId(productId);
+        List<OrderItem> orderItems = repos.getOrderItemByProductId(productId);
         List<OrderItemDTO> orderItemDTOs = mapper.toDto(orderItems);
         return orderItemDTOs.stream()
                 .map(OrderItemDTO::getComment)
-                .filter(Objects::nonNull) // Lọc bỏ các comment null
+                .filter(Objects::nonNull)
                 .filter(comment -> comment.getCommentText() != null)
                 .toList();
 
