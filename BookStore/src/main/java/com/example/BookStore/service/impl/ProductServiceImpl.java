@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -56,17 +55,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void update(ProductDTO productDTO) {
-        Product product = mapper.toEntity(productDTO);
         Product theProduct = repos
                 .findById(productDTO.getId())
                 .orElseThrow(() -> new CartItemNotFoundException("Could not find any product with Id=" + productDTO.getId()));
 
-        theProduct.setItem(product.getItem());
-        theProduct.setStockQty(product.getStockQty());
-        theProduct.setBlocked(product.isBlocked());
-        theProduct.setDeleted(product.isDeleted());
-        theProduct.setDiscountPercent(product.getDiscountPercent());
-        theProduct.setPrice(product.getPrice());
+        theProduct.setItem(bookMapper.toEntity(productDTO.getItem()));
+        theProduct.setStockQty(productDTO.getStockQty());
+        theProduct.setBlocked(productDTO.isBlocked());
+        theProduct.setDeleted(productDTO.isDeleted());
+        theProduct.setDiscountPercent(productDTO.getDiscountPercent());
+        theProduct.setPrice(productDTO.getPrice());
 
         try{
             Product updated = repos.save(theProduct);
@@ -77,8 +75,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> findFavoriteProductByUserId(Long userId) {
-        List<Product> products = repos.findFavoritesByUserId(userId);
+    public List<ProductDTO> findFavoriteByUserId(Long userId) {
+        List<Product> products = repos.findFavoriteByUserId(userId);
         if (products == null || products.isEmpty())
             throw new ProductNotFoundException("Could not find any favorite with userId=" + userId);
         return mapper.toDto(products);

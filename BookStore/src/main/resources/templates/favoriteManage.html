@@ -49,8 +49,8 @@
     <div class="favorites-manage-container">
         <h2 class="title">My Favorites</h2>
         <th:block th:if="${not #lists.isEmpty(favorites)}">
-            <div class="favorites-list" th:each="product: ${favorites}">
-                <a class="favorite-item"
+            <div class="favorites-list">
+                <a class="favorite-item"  th:each="product: ${favorites}"
                    th:href="@{'/product/' + ${product.id}}">
                     <div class="img-frame">
                         <img th:src="@{'/images/product/' + ${product.id} + '.png'}" alt="Image Product">

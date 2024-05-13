@@ -2,7 +2,6 @@ package com.example.BookStore.controller;
 
 import com.example.BookStore.dto.CommentDTO;
 import com.example.BookStore.dto.ProductDTO;
-import com.example.BookStore.dto.UserDTO;
 import com.example.BookStore.exception.ProductNotFoundException;
 import com.example.BookStore.service.OrderItemService;
 import com.example.BookStore.service.ProductService;
@@ -38,6 +37,8 @@ public class ProductController {
         boolean isChecked = false;
         try{
             product = productService.findById(productId);
+            if(product.isBlocked() || product.isDeleted())
+                return "redirect/home";
             amountPurchased = orderItemService.countQtyProductByProductId(productId);
             comments = orderItemService.findCommentByProductId(productId);
             if(productService.isFavoritedByUser(productId, userId)){
@@ -59,7 +60,7 @@ public class ProductController {
         List<ProductDTO> favorites = Collections.emptyList();
 
         try {
-            favorites = productService.findFavoriteProductByUserId(userId);
+            favorites = productService.findFavoriteByUserId(userId);
         } catch (ProductNotFoundException e){
             log.error("Error while fetching favorites with Id: {}", userId, e);
         }

@@ -121,8 +121,8 @@
         <hr>
         <i>Bình luận:</i>
         <th:block th:if="${not #lists.isEmpty(comments)}">
-            <div class="comment-list" th:each="comment: ${comments}">
-                <div class="comment-details">
+            <div class="comment-list" >
+                <div class="comment-details" th:each="comment: ${comments}">
                     <h4 class="user-name" th:text="${comment.commentorName}"><
                         <ion-icon name="checkmark-done-outline"></ion-icon>
                     </h4>

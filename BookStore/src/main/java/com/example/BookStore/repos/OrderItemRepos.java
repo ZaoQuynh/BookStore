@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface OrderItemRepos extends JpaRepository<OrderItem, Long> {
     @Query("SELECT o FROM OrderItem o WHERE o.product.id = ?1")
-    List<OrderItem> countQtyProductByProductId(Long productId);
+    List<OrderItem> getOrderItemByProductId(Long productId);
 }

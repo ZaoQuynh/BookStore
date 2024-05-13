@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface ProductRepos extends JpaRepository<Product, Long> {
 
     @Query("SELECT o FROM Product o JOIN o.favoriteByUsers u WHERE u.id = ?1")
-    List<Product> findFavoritesByUserId(Long userId);
+    List<Product> findFavoriteByUserId(Long userId);
     @Query("SELECT o FROM Product o JOIN o.favoriteByUsers u WHERE o.id = ?1 AND u.id = ?2")
     Optional<Product> isFavoritedByUser(Long productId, Long userId);
 
