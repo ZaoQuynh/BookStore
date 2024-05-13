@@ -1,0 +1,114 @@
+.product-list {
+    margin: 20px auto;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    width: 1000px;
+}
+.product-list h2 {
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+    color: #333;
+}
+
+.product-list li {
+    list-style-type: none;
+    margin-bottom: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #666;
+}
+
+.product-list li span {
+    font-weight: bold;
+    color: #000;
+}
+
+#header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #32a9fe;
+    color: #fff;
+    padding: 10px;
+}
+
+#header a {
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+}
+
+#navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+#navbar li {
+    margin-left: 10px;
+}
+
+#navbar li:first-child {
+    margin-left: 0;
+}
+
+#navbar li a {
+    text-decoration: none;
+    color: #fff;
+}
+
+#navbar form input[type="submit"] {
+    background-color: #555;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+#navbar form input[type="submit"]:hover {
+    background-color: #777;
+}
+.container {
+    width: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}

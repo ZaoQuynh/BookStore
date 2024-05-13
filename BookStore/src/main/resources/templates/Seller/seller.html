@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý đơn hàng </title>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" th:href="@{/images/icon_address_bar.png}">
+    <link rel="stylesheet" th:href="@{/css/seller.css}">
+    <style>
+
+        #content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+        }
+
+        .content-title {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--header-color);
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <section id="header">
+        <a>Tiệm Sách</a>
+        <div>
+            <ul id="navbar">
+                <li><a class="active" href="quanlidonhang">Quản Lý Đơn Hàng</a> </li>
+                <li><a class="active" href="trochuyen">Trò Chuyện</a> </li>
+                <li><a class="active" href="nguoiban">Quản Lý Sách</a> </li>
+                <li><form th:action="@{/logout}" method="post">
+                    <input type="submit" value="Sign Out"/></form> </li>
+            </ul>
+        </div>
+    </section>
+</header>
+<section id="content">
+    <div class="container">
+        <h1>Thêm Sản Phẩm Mới</h1>
+        <form id="add-product-form" action="/addProduct" method="post">
+            <div class="form-group">
+                <label for="title">Tiêu đề:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="authors">Tác giả:</label>
+                <input type="text" id="authors" name="authors" required>
+            </div>
+            <div class="form-group">
+                <label for="publisher">Nhà xuất bản:</label>
+                <input type="text" id="publisher" name="publisher" required>
+            </div>
+            <div class="form-group">
+                <label for="publisherYear">Năm xuất bản:</label>
+                <input type="number" id="publisherYear" name="publisherYear" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="price">Giá:</label>
+                <input type="number" id="price" name="price" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Mô tả:</label>
+                <textarea id="description" name="description" required></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit">Thêm sản phẩm</button>
+            </div>
+        </form>
+    </div>
+
+    <div th:if="${Message}">
+        <p th:text="${Message}"></p>
+    </div>
+
+    <div class="content-seller">
+<!--        <h1 class="content-title">Sản phẩm đang bán</h1>-->
+<!--        <div class="seller-container">-->
+<!--            <div class="product-list">-->
+<!--                <li th:each="products : ${seller}">-->
+<!--                    <span th:text="${products.item.title}">title</span>-->
+<!--                    <span th:text="${products.item.authors}">authors</span>-->
+<!--                    <span th:text="${products.price}">price</span>-->
+<!--                    <button class="edit"> Edit </button>-->
+<!--                    <button class="delete"> Delete </button>-->
+<!--                </li>-->
+<!--            </div>-->
+<!--        </div>-->
+    </div>
+
+</section>
+<footer>
+
+</footer>
+<script th:src="@{/js/message.js}"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
