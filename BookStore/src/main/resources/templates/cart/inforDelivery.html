@@ -105,7 +105,7 @@
                 <p th:text="${totalPrice}">
             </div>
             <hr>
-            <button class="btn-continue" onclick="submitForm('select-infor-delivery')">Tiếp tục</button>
+            <button class="btn-continue" onclick="submitForm('select-infor-delivery')" th:if="${not #lists.isEmpty(cart)}">Tiếp tục</button>
 
             <form th:action="@{/cart}" th:method="get">
                 <button class="btn-cancel">Trở lại</button>
