@@ -1,7 +1,6 @@
 package com.example.BookStore.dto;
 
 import com.example.BookStore.entity.Order;
-import com.example.BookStore.entity.Payment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

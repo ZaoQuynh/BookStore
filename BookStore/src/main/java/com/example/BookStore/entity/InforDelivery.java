@@ -32,7 +32,7 @@ public class InforDelivery {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @OneToMany
+    @OneToMany(mappedBy = "inforDelivery")
     private List<Order> orders;
 
 }

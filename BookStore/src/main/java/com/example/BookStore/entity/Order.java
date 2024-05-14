@@ -31,7 +31,6 @@ public class Order {
     private Payment payment;
 
     @ManyToOne
-    @JoinColumn(name = "inforDelivery_id")
     private InforDelivery inforDelivery;
 
     public enum EOrderStatus{

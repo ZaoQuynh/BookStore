@@ -10,6 +10,24 @@
     <link rel="icon" th:href="@{/images/icon_address_bar.png}">
     <link rel="stylesheet" th:href="@{/css/inforDelivery.css}">
     <link rel="stylesheet" th:href="@{/css/message.css}">
+    <style>
+        .product_img-frame{
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .product_img{
+            height: 100%;
+            width: auto;
+            max-width: 100px;
+            max-height: 100px;
+            display: block;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -67,7 +85,7 @@
             <hr>
             <div class="product-list">
                 <th:block th:if="${not #lists.isEmpty(cart)}">
-                    <div class="product-list" th:each="carItem: ${cart}">
+                    <div class="product-list" th:each="cartItem: ${cart}">
                         <table class="product_details-container">
                             <thead>
                             <tr class="product-img-container">
@@ -75,7 +93,7 @@
                                     <div class="product_img-frame">
                                         <a href="#">
                                             <img class="product_img" alt="Product Image"
-                                                 th:src="@{images/temp-product.png}">
+                                                 th:src="@{'/images/product/' + ${cartItem.product.id} + '.png'}">
                                         </a>
                                     </div>
                                 </th>
@@ -85,14 +103,14 @@
                             <tr class="product_details-left">
                                 <td class="product-title">
                                     <a href="#">
-                                        <strong th:text="${carItem.product.item.title}"/>
+                                        <strong th:text="${cartItem.product.item.title}"/>
                                     </a>
                                 </td>
-                                <td class="product-current-price" th:text="${carItem.product.formatCurrentPrice}"/>
+                                <td class="product-current-price" th:text="${cartItem.product.formatCurrentPrice}"/>
                             </tr>
                             <tr class="product_details-right">
-                                <td class="product-qty" th:text="${carItem.formatQty}"/>
-                                <td class="product-total-price" th:text="${carItem.formatTotalPrice}"/>
+                                <td class="product-qty" th:text="${cartItem.formatQty}"/>
+                                <td class="product-total-price" th:text="${cartItem.formatTotalPrice}"/>
                             </tr>
                             </tbody>
                         </table>

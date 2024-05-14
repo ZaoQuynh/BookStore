@@ -7,9 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -24,7 +21,6 @@ public class ProductDTO {
     private UserDTO seller;
     private boolean isBlocked;
     private boolean isDeleted;
-    private List<CartItemDTO> cartItem;
 
     public BigDecimal getCurrentPrice() {
         if(!(this.isBlocked || this.isDeleted))

@@ -19,5 +19,4 @@ public class InforDeliveryDTO {
     private String ward;
     private String phoneNumber;
     private UserDTO user;
-    private List<OrderDTO> orders;
 }

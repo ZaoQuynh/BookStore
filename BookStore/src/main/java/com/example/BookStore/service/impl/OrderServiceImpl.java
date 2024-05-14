@@ -26,6 +26,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO add(OrderDTO orderDTO) {
         Order order = mapper.toEntity(orderDTO);
+        order.getOrderItems().forEach(item -> item.setOrder(order));
         try {
             order.setOrderDate(new Date());
             Order added = repos.save(order);
@@ -51,8 +52,8 @@ public class OrderServiceImpl implements OrderService {
         List<OrderDTO> orders = new ArrayList<>();
         ordersMap.forEach((seller, orderItems) -> {
             OrderDTO order = new OrderDTO();
-            order.setOrderItems(orderItems);
             order.setOrderStatus(Order.EOrderStatus.PENDING);
+            order.setOrderItems(orderItems);
             orders.add(order);
         });
         return orders;

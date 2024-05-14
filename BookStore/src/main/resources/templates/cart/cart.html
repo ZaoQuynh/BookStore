@@ -54,7 +54,8 @@
                                         <strong th:text="${cartItem.product.item.title}"/>
                                     </a>
                                 </td>
-                                <th:block th:if="${not (cartItem.product.isBlocked || cartItem.product.isDeleted || cartItem.product.stockQty<=0)}">
+                                <th:block
+                                        th:if="${not (cartItem.product.isBlocked || cartItem.product.isDeleted || cartItem.product.stockQty<=0)}">
                                     <td class="product-current-price" th:text="${cartItem.product.formatCurrentPrice}"/>
                                     <td class="product-price" style="font-size: 0.75em;">
                                         <th:block th:if="${cartItem.product.discountPercent ne 0}">
@@ -66,35 +67,39 @@
                                         </div>
                                     </td>
                                     <td class="product_custom-number" style="height: 100%;">
-                                        <div class="product-control">
-                                            <form th:action="@{/cart/updateQuantity}"
-                                                  th:method="post" id="product-control">
-                                                <input type="hidden" name="id" th:value="${cartItem.id}"/>
-                                                <input type="hidden" name="qtyChangeInput" id="qtyChangeInput"/>
-                                                <input type="hidden" name="event" id="event"/>
-                                            </form>
-                                            <button class="button-minus" onclick="submitForm('product-control', -1, 'button')">
-                                                <ion-icon name="remove-outline"></ion-icon>
-                                            </button>
-                                            <input type="hidden" name="qty" id="qty" th:value="${cartItem.qty}"/>
-                                            <input class="input-quantity" type="text" th:placeholder="${cartItem.qty}" id="inputQuantity" onchange="submitForm('product-control', this.value, '')"/>
-                                            <button class="button-add" onclick="submitForm('product-control', 1, 'button')">
-                                                <ion-icon name="add-outline"></ion-icon>
-                                            </button>
-                                        </div>
+                                        <form th:action="@{/cart/updateQuantity}" th:method="post"
+                                              class="product-form">
+                                            <input type="hidden" name="id" th:value="${cartItem.id}"/>
+                                            <input type="hidden" name="qtyChangeInput" class="qtyChangeInput"/>
+                                            <input type="hidden" name="event" class="eventInput"/>
+                                            <div class="product-control">
+                                                <button class="button-minus" onclick="submitForm(this, -1, 'button')">
+                                                    <ion-icon name="remove-outline"></ion-icon>
+                                                </button>
+                                                <input class="input-quantity" type="text"
+                                                       th:placeholder="${cartItem.qty}" onkeypress="handleKeyPress(event)"
+                                                       onchange="submitForm(this, this.value, '')"/>
+                                                <button class="button-add" onclick="submitForm(this, 1, 'button')">
+                                                    <ion-icon name="add-outline"></ion-icon>
+                                                </button>
+                                            </div>
+                                        </form>
                                     </td>
                                 </th:block>
 
-                                <th:block th:if="${(cartItem.product.isBlocked || cartItem.product.isDeleted || cartItem.product.stockQty<=0)}">
+                                <th:block
+                                        th:if="${(cartItem.product.isBlocked || cartItem.product.isDeleted || cartItem.product.stockQty<=0)}">
                                     <td class="product-current-price" th:text="${cartItem.product.formatPrice}"/>
                                 </th:block>
                             </tr>
                             <tr class="product_details-right">
-                                <th:block th:if="${not (cartItem.product.isBlocked || cartItem.product.isDeleted || cartItem.product.stockQty<=0)}">
+                                <th:block
+                                        th:if="${not (cartItem.product.isBlocked || cartItem.product.isDeleted || cartItem.product.stockQty<=0)}">
                                     <td class="product-qty" th:text="${cartItem.formatQty}"/>
                                     <td class="product-total-price" th:text="${cartItem.formatTotalPrice}"/>
                                 </th:block>
-                                <th:block th:if="${(cartItem.product.isBlocked || cartItem.product.isDeleted || cartItem.product.stockQty<=0)}">
+                                <th:block
+                                        th:if="${(cartItem.product.isBlocked || cartItem.product.isDeleted || cartItem.product.stockQty<=0)}">
                                     <td style="color: red;">Sản phẩm không tổn tại</td>
                                 </th:block>
                                 <th:block th:if="${(cartItem.qty > cartItem.product.stockQty)}">
@@ -147,6 +152,35 @@
 </footer>
 <script th:src="@{/js/message.js}"></script>
 <script th:src="@{/js/cart.js}"></script>
+<script>
+    function submitForm(element, qtyChange, event) {
+        // Tìm form gần nhất với class "product-form"
+        var form = element.closest('form.product-form');
+        if (!form) {
+            console.error("Form không được tìm thấy.");
+            return;
+        }
+
+        // Tìm các input bên trong form
+        var qtyChangeInput = form.querySelector('.qtyChangeInput');
+        var eventInput = form.querySelector('.eventInput');
+        var idInput = form.querySelector('input[name="id"]');
+
+        if (qtyChangeInput && eventInput && idInput) {
+            qtyChangeInput.value = qtyChange;
+            eventInput.value = event;
+            form.submit();
+        } else {
+            console.error("Input qtyChange hoặc event hoặc id không được tìm thấy.");
+        }
+    }
+
+    function handleKeyPress(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault(); // Ngăn chặn hành vi mặc định của phím Enter
+        }
+    }
+</script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
