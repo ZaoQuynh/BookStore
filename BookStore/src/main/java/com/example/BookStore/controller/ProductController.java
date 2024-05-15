@@ -31,7 +31,7 @@ public class ProductController {
     private UserService userService;
 
     @GetMapping("/{productId}")
-    public String getProduct(@PathVariable("productId") Long productId, Model model) {
+    public String getProduct(@PathVariable("productId") Long productId, Model model, RedirectAttributes ra) {
         ProductDTO product;
         int amountPurchased;
         List<CommentDTO> comments;
@@ -46,6 +46,7 @@ public class ProductController {
             }
         } catch (ProductNotFoundException e){
             log.error("Error while fetching product with Id: {}", productId, e);
+            ra.addFlashAttribute("errorMessage", "Sản phẩm không tồn tại.");
             return "redirect:/home";
         }
         model.addAttribute("isChecked", isChecked);
