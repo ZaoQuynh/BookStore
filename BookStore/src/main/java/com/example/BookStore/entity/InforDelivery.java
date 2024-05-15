@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Setter
 @Getter
 @NoArgsConstructor
@@ -25,14 +23,10 @@ public class InforDelivery {
     @Column
     private String district;
     @Column
-    private String ward;
+    private String street;
     @Column
     private String phoneNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-
-    @OneToMany(mappedBy = "inforDelivery")
-    private List<Order> orders;
-
 }

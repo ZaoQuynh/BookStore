@@ -1,111 +1,87 @@
 package com.example.BookStore.service.impl;
 
-import com.example.BookStore.dto.ProductDTO;
 import com.example.BookStore.entity.Product;
-import com.example.BookStore.entity.User;
-import com.example.BookStore.exception.CartItemNotFoundException;
-import com.example.BookStore.exception.ProductNotFoundException;
-import com.example.BookStore.exception.UserNotFoundException;
-import com.example.BookStore.mapper.BookMapper;
-import com.example.BookStore.mapper.ProductMapper;
-import com.example.BookStore.mapper.UserMapper;
 import com.example.BookStore.repos.ProductRepos;
-import com.example.BookStore.repos.UserRepos;
 import com.example.BookStore.service.ProductService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-    private final Logger log = LogManager.getLogger(ProductServiceImpl.class);
 
-    @Autowired
-    private ProductRepos repos;
-    @Autowired
-    private UserRepos userRepos;
-
-    @Autowired
-    private ProductMapper mapper;
-
-    @Autowired
-    private BookMapper bookMapper;
-
-    @Autowired
-    private UserMapper userMapper;
+    private final ProductRepos productRepos;
 
     @Override
-    public ProductDTO findById(Long id) {
-        Product product = repos
-                .findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Could not find any product with Id=" + id));
-        return mapper.toDto(product);
+    public List<Product> getsAllProducts() {
+
+        return productRepos.findAllByIsDeletedFalseAndIsBlockedFalse();
     }
 
     @Override
-    public void updateStockQty(ProductDTO product, int qtyPurchased) {
-        product.setStockQty(product.getStockQty() - qtyPurchased);
-        System.out.println(product.getStockQty());
-        this.update(product);
+    public List<Product> getsAllProductsAdmin() {
+
+        return productRepos.findAllByIsDeletedFalse();
     }
 
     @Override
-    public void update(ProductDTO productDTO) {
-        Product theProduct = repos
-                .findById(productDTO.getId())
-                .orElseThrow(() -> new CartItemNotFoundException("Could not find any product with Id=" + productDTO.getId()));
-
-        theProduct.setItem(bookMapper.toEntity(productDTO.getItem()));
-        theProduct.setStockQty(productDTO.getStockQty());
-        theProduct.setBlocked(productDTO.isBlocked());
-        theProduct.setDeleted(productDTO.isDeleted());
-        theProduct.setDiscountPercent(productDTO.getDiscountPercent());
-        theProduct.setPrice(productDTO.getPrice());
-
-        try{
-            Product updated = repos.save(theProduct);
-            mapper.toDto(updated);
-        } catch (Exception e){
-            log.error(e.getMessage());
-        }
+    public List<Product> searchProducts(String query) {
+        // Tìm kiếm dựa trên từ khóa 'query'
+        List<Product> allProducts = productRepos.findAllByIsDeletedFalseAndIsBlockedFalse();
+        List<Product> searchResults = allProducts.stream()
+                .filter(product -> product.getTitle().toLowerCase().contains(query.toLowerCase()) ||
+                        product.getAuthors().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+        return searchResults;
     }
 
     @Override
-    public List<ProductDTO> findFavoriteByUserId(Long userId) {
-        List<Product> products = repos.findFavoriteByUserId(userId);
-        if (products == null || products.isEmpty())
-            throw new ProductNotFoundException("Could not find any favorite with userId=" + userId);
-        return mapper.toDto(products);
+    public List<Product> searchProductsAdmin(String query) {
+        // Tìm kiếm dựa trên từ khóa 'query'
+        List<Product> allProducts = productRepos.findAllByIsDeletedFalse();
+        List<Product> searchResults = allProducts.stream()
+                .filter(product -> product.getTitle().toLowerCase().contains(query.toLowerCase()) ||
+                        product.getAuthors().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+        return searchResults;
     }
 
     @Override
-    public boolean isFavoritedByUser(Long productId, Long userId) {
-        Optional<Product> product = repos
-                .isFavoritedByUser(productId, userId);
-        return product.isPresent();
+    public void blockProduct(Long id) {
+        Product product = productRepos.findByIdAndIsDeletedFalse(id).orElseThrow(() -> new UsernameNotFoundException("Product not found with id: " + id));
+        product.setBlocked(true);
+        productRepos.save(product);
     }
 
     @Override
-    public void loveProduct(Long productId, Long userId) {
-        Product product = repos.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + productId));
+    public void unblockProduct(Long id) {
+        Product product = productRepos.findByIdAndIsDeletedFalse(id).orElseThrow(() -> new UsernameNotFoundException("Product not found with id: " + id));
+        product.setBlocked(false);
+        productRepos.save(product);
+    }
 
-        User user = userRepos.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+    @Override
+    public void deletedProduct(Long id) {
+        Product product = productRepos.findByIdAndIsDeletedFalse(id).orElseThrow(() -> new UsernameNotFoundException("Product not found with id: " + id));
+        product.setDeleted(true);
+        productRepos.save(product);
+    }
 
-        if (product.getFavoriteByUsers().contains(user)) {
-            product.getFavoriteByUsers().remove(user);
-            user.getFavoriteProducts().remove(product);
-        } else {
-            product.getFavoriteByUsers().add(user);
-            user.getFavoriteProducts().add(product);
-        }
+    @Override
+    public void unDeletedProduct(Long id) {
+        Product product = productRepos.findById(id).orElseThrow(() -> new UsernameNotFoundException("Product not found with id: " + id));
+        product.setDeleted(false);
+        productRepos.save(product);
+    }
 
-        repos.save(product);
-        userRepos.save(user);
+    @Override
+    public List<Product> getsAllProductsBySeller(Long id) {
+
+        return productRepos.findBySellerIdAndIsDeletedFalseAndIsBlockedFalse(id);
     }
 }

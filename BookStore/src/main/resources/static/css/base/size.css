@@ -1,24 +1,4 @@
 :root{
-    --title-size: 1.5em;
-    --text-size: 1em;
-
-    /* Cart */
-    --cart-content-left-width-size: 800px;
-    --cart-content-left-height-size: auto;
-    --cart-content-right-width-size: 330px;
-    --cart-content-right-height-size: auto;
-
-    /* Cart Item */
-    --cart-product-item-width-size: 100%;
-    --cart-product-item-height-size: auto;
-
-    --cart-button-size: 30px;
-    --cart-icon-size: 40px;
-
-    --cart-input-width-size: 50px;
-    --cart-input-height-size: 24px;
-
-    --cart-button-continue-width-size: 100%;
-    --cart-button-continue-height-size: 35px;
-
+    --title-size: 4vh;
+    --text-size: 3vh;
 }

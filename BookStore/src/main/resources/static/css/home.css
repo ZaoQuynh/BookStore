@@ -1,0 +1,36 @@
+
+
+/* Sidebar */
+.index {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #F0F2F5;
+    overflow-x:hidden;
+}
+
+/*.index_search {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    flex-direction: column;*/
+/*    background: #F0F2F5;*/
+/*    overflow-x:hidden;*/
+/*}*/
+
+
+.body_search {
+    width: 1000px;
+}
+
+.home_middle {
+    width: 1304px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
+
+
+

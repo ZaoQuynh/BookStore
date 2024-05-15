@@ -1,14 +1,27 @@
 package com.example.BookStore.service;
 
-import com.example.BookStore.dto.ProductDTO;
+import com.example.BookStore.entity.Product;
+import com.example.BookStore.entity.User;
 
 import java.util.List;
 
 public interface ProductService {
-    ProductDTO findById(Long id);
-    void updateStockQty(ProductDTO product, int qtyPurchased);
-    void update(ProductDTO productDTO);
-    List<ProductDTO> findFavoriteByUserId(Long userId);
-    boolean isFavoritedByUser(Long productId, Long userId);
-    void loveProduct(Long productId, Long userId);
+
+    List<Product> getsAllProducts();
+
+    List<Product> searchProducts(String query);
+    
+    List<Product> searchProductsAdmin(String query);
+
+    void blockProduct(Long id);
+
+    void unblockProduct(Long id);
+
+    void deletedProduct(Long id);
+
+    void unDeletedProduct(Long id);
+
+    List<Product> getsAllProductsBySeller(Long id);
+
+    List<Product> getsAllProductsAdmin();
 }

@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tiệm sách</title>
+    <link rel="icon" type="image/svg+xml" href="https://png.pngtree.com/template/20190809/ourmid/pngtree-reading-book-logo-designs-image_291340.jpg" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/static/css/home.css}">
+    <link rel="stylesheet" th:href="@{/static/css/products.css}">
+    <link rel="stylesheet" th:href="@{/static/css/style.css}">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+            crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+            rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.min.css"
+            rel="stylesheet"
+    />
+</head>
+<body>
+<!-- Navbar-->
+<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+    <div class="container-fluid justify-content-between">
+        <!-- Left elements -->
+        <div class="d-flex">
+            <!-- Brand -->
+            <a class="navbar-brand me-2 mb-1 d-flex align-items-center" th:href="@{/}">
+                <img
+                        src="https://png.pngtree.com/template/20190809/ourmid/pngtree-reading-book-logo-designs-image_291340.jpg"
+                        height="30"
+                        loading="lazy"
+                        style="margin-top: 2px;"
+                />
+                Tiệm sách
+            </a>
+
+            <!-- Search form -->
+            <form class="input-group w-auto my-auto d-none d-sm-flex" onsubmit="searchProduct(event)">
+                <input
+                        autocomplete="off"
+                        type="search"
+                        class="form-control rounded"
+                        placeholder="Tìm kiếm sách"
+                        style="min-width: 125px;"
+                        name="searchQuery"
+                />
+                <button th:type="submit" class="input-group-text border-0 d-none d-lg-flex"
+                ><i class="fas fa-search"></i
+                ></button>
+            </form>
+        </div>
+        <!-- Left elements -->
+
+        <!-- Center elements -->
+        <header th:if="${username}">
+            <!-- Header khi đã đăng nhập -->
+            <ul class="navbar-nav flex-row">
+
+                <li class="nav-item me-3 me-lg-1" style="display: flex; align-items: center;">
+                    <!-- Icon -->
+                    <a class="link-secondary me-3" href="#">
+                        <i class="fas fa-shopping-cart"></i>
+                    </a>
+                    <a class="nav-link d-sm-flex align-items-sm-center" href="#">
+                        <strong class="d-none d-sm-block ms-1"><span th:text="${username}"></span></strong>
+
+                    </a>
+                </li>
+
+
+                <li class="nav-item dropdown me-3 me-lg-1">
+                    <a
+                            data-mdb-dropdown-init
+                            class="nav-link dropdown-toggle hidden-arrow"
+                            href="#"
+                            id="navbarDropdownMenuLink"
+                            role="button"
+                            aria-expanded="false"
+                    >
+                        <img
+                                src="https://static-00.iconduck.com/assets.00/user-icon-512x512-x23sj495.png"
+                                class="rounded-circle"
+                                height="22"
+                                alt="Black and White Portrait of a Man"
+                                loading="lazy"
+                        />
+                    </a>
+                    <ul
+                            class="dropdown-menu dropdown-menu-end"
+                            aria-labelledby="navbarDropdownMenuLink"
+                    >
+                        <li>
+                            <a class="dropdown-item" th:href="@{/profile}">Trang cá nhân</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">Yêu thích</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">Trò chuyện</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">Lịch sử</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" th:if="${user.role} == 'SELLER'" th:href="@{/profile/statistical}">Thống
+                                kê</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" th:href="@{/logout}">Đăng xuất</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <!-- Các phần khác của header khi đã đăng nhập -->
+        </header>
+        <header th:unless="${username}">
+            <!-- Header khi chưa đăng nhập -->
+            <ul class="navbar-nav flex-row">
+                <li class="nav-item me-3 me-lg-1">
+                    <a class="nav-link d-sm-flex align-items-sm-center" href="#">
+                        <strong class="d-none d-sm-block ms-1">Tài khoản</strong>
+                    </a>
+                </li>
+
+
+                <li class="nav-item dropdown me-3 me-lg-1">
+                    <a
+                            data-mdb-dropdown-init
+                            class="nav-link dropdown-toggle hidden-arrow"
+                            href="#"
+                            id="navbarDropdownMenuLink1"
+                            role="button"
+                            aria-expanded="false"
+                    >
+                        <img
+                                src="https://static-00.iconduck.com/assets.00/user-icon-512x512-x23sj495.png"
+                                class="rounded-circle"
+                                height="22"
+                                alt="Black and White Portrait of a Man"
+                                loading="lazy"
+                        />
+                    </a>
+                    <ul
+                            class="dropdown-menu dropdown-menu-end"
+                            aria-labelledby="navbarDropdownMenuLink"
+                    >
+                        <li>
+                            <a class="dropdown-item" th:href="@{/login}">Đăng nhập</a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" th:href="@{/register}">Đăng ký</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- Các phần khác của header khi chưa đăng nhập -->
+        </header>
+        <!-- Right elements -->
+
+        <!-- Right elements -->
+    </div>
+</nav>
+<div class="index">
+
+    <section style="background-color: #eee;">
+        <div class="container py-5" style="width: 1105px;">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <img src="https://res.cloudinary.com/dii5yhoar/image/upload/v1715649272/java_yq493r.png"
+                                 alt="avatar"
+                                 class="rounded-circle img-fluid" style="width: 150px;">
+                            <h5 class="my-3" th:text="${user.fullName}"></h5>
+                            <div class="d-flex justify-content-center mb-2">
+                                <button type="button" data-mdb-button-init data-mdb-ripple-init
+                                        class="btn btn-primary ms-1" onclick="goToEdit(event)">
+                                    Cập nhật
+                                </button>
+                                <button data-bs-toggle="modal" data-bs-target="#exampleModal" data-mdb-button-init
+                                        data-mdb-ripple-init
+                                        class="btn btn-danger ms-1">Xóa tài khoản
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-4 mb-lg-0">
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <form class="modal-content" id="deleteForm" th:action="@{/profile}" method="post">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Xác nhận xóa tài khoản</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="username" class="form-label">User name</label>
+                                            <input type="text" name="username" class="form-control" id="username">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="password" class="form-label">Password</label>
+                                            <input type="password" name="password" class="form-control" id="password">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">Xác nhận xóa</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Họ và tên</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" th:text="${user.fullName}"></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Email</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" th:text="${user.email}"></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Vai trò</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" th:text="${user.role}"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" th:if="${user.role == 'SELLER'}">
+                <div class="card-body home_middle" style="margin-top: 10px; display: flex;
+    flex-direction: row;   background-color: beige; padding: 10px;">
+                    <div class="row col-md-3">
+                        <h3>Cửa hàng</h3>
+                        <h6 style="margin-top: 10px;">Thể loại</h6>
+                        <!-- Thể loại -->
+                        <div class="form-check ">
+                            <input class="form-check-input" type="radio" name="category" id="category-all" value="all"
+                                   checked/>
+                            <label class="form-check-label" for="category-all"> Tất cả</label>
+                        </div>
+                        <!-- Các tùy chọn thể loại -->
+                        <div class="form-check ">
+                            <input class="form-check-input" type="radio" name="category" id="category-novel"
+                                   value="NOVELS"/>
+                            <label class="form-check-label" for="category-novel"> Tiểu thuyết</label>
+                        </div>
+
+                        <!-- Default checked radio -->
+                        <div class="form-check ">
+                            <input class="form-check-input" type="radio" name="category" id="category-comic"
+                                   value="COMICS"/>
+                            <label class="form-check-label" for="category-comic"> Truyện tranh</label>
+                        </div>
+                        <!-- Default checked radio -->
+                        <div class="form-check ">
+                            <input class="form-check-input" type="radio" name="category" id="category-language"
+                                   value="LANGUAGE_LEARNINGS"/>
+                            <label class="form-check-label" for="category-language"> Ngôn ngữ</label>
+                        </div>
+                        <!-- Default checked radio -->
+                        <div class="form-check ">
+                            <input class="form-check-input" type="radio" name="category" id="category-detective"
+                                   value="DETECTIVE"/>
+                            <label class="form-check-label" for="category-detective"> Trinh thám</label>
+                        </div>
+                        <h6 style="margin-top: 20px;">Giá</h6>
+                        <div class="form-check ">
+                            <input class="form-check-input" type="radio" name="price" id="price-all" value="all"
+                                   checked/>
+                            <label class="form-check-label" for="price-all"> Tất cả</label>
+                        </div>
+                        <div class="form-check ">
+                            <input class="form-check-input" type="radio" name="price" id="flexRadioDefault7"
+                                   value="0-100"/>
+                            <label class="form-check-label" for="flexRadioDefault7"> 0 - 100.000đ</label>
+                        </div>
+                        <!-- Default checked radio -->
+                        <div class="form-check ">
+                            <input class="form-check-input" type="radio" name="price" id="flexRadioDefault8"
+                                   value="100-150"/>
+                            <label class="form-check-label" for="flexRadioDefault8"> 100.000đ - 150.000đ</label>
+                        </div>
+                        <!-- Default checked radio -->
+                        <div class="form-check ">
+                            <input class="form-check-input" type="radio" name="price" id="flexRadioDefault9"
+                                   value="150-300"/>
+                            <label class="form-check-label" for="flexRadioDefault9"> 150.000đ - 300.000đ</label>
+                        </div>
+                        <!-- Default checked radio -->
+                        <div class="form-check ">
+                            <input class="form-check-input" type="radio" name="price" id="flexRadioDefault10"
+                                   value="300-500"/>
+                            <label class="form-check-label" for="flexRadioDefault10"> 300.000đ - 500.000đ</label>
+                        </div>
+                        <!-- Default checked radio -->
+                        <div class="form-check ">
+                            <input class="form-check-input" type="radio" name="price" id="flexRadioDefault11"
+                                   value="500-700"/>
+                            <label class="form-check-label" for="flexRadioDefault11"> 500.000đ - 700.000đ</label>
+                        </div>
+                        <!-- Default checked radio -->
+                        <div class="form-check ">
+                            <input class="form-check-input" type="radio" name="price" id="flexRadioDefault12"
+                                   value="700-plus"/>
+                            <label class="form-check-label" for="flexRadioDefault12"> 700.000đ - Trở Lên</label>
+                        </div>
+                    </div>
+                    <div class="row col-md-9">
+                        <div style="display: flex;flex-wrap: wrap;">
+                            <!-- Sản phẩm -->
+                            <div class="col-md-2" th:each="product, iterStat : ${products}"
+                                 th:data-product-id="${product.id}" th:data-product-genre="${product.genre}"
+                                 th:data-product-price="${product.price}">
+                                <div class="card mb-4" style="margin: 10px; height: 280px;">
+                                    <div class="bg-image hover-overlay" data-mdb-ripple-init
+                                         data-mdb-ripple-color="light">
+                                        <img th:src="${product.img}"
+                                             class="img-fluid" alt="Product Image"/>
+                                        <a href="#!">
+                                            <div class="mask"
+                                                 style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                                        </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="text_title" th:text="${product.title}" style="font-size: .7rem">></p>
+                                        <p class="price" th:text="${product.price + ' đ'}"style="font-size: .8rem">></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navbar -->
+    <footer class="text-center text-lg-start bg-body-tertiary text-muted">
+        <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+            <div class="me-5 d-none d-lg-block">
+                <span>Hãy kết nối với chúng tôi trên các mạng xã hội:</span>
+            </div>
+
+            <div>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-google"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+        </section>
+
+        <section class="">
+            <div class="container text-center text-md-start mt-5">
+                <div class="row mt-3">
+                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            <i class="fas fa-gem me-3"></i>Tiệm sách
+                        </h6>
+                        <p>
+                            Nơi cung cấp sách vở phù hợp cho mọi lứa tuổi với đa dạng thể loại được tới từ nhiều nơi
+                            trên thế giới !
+                        </p>
+                    </div>
+
+                    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <h6 class="text-uppercase fw-bold mb-4">Loại sách </h6>
+                        <p>
+                            <a href="#!" class="text-reset">
+                                Truyện tranh
+                            </a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">
+                                Trinh thám
+                            </a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">
+                                Tiểu thuyết
+                            </a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">
+                                Ngôn ngữ
+                            </a>
+                        </p>
+                    </div>
+
+                    <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <h6 class="text-uppercase fw-bold mb-4">Thành viên tham gia</h6>
+                        <p>
+                            <a href="#!" class="text-reset">
+                                Tiên
+                            </a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">
+                                Phát
+                            </a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">
+                                Thắng
+                            </a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">
+                                Giao
+                            </a>
+                        </p>
+                    </div>
+
+                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                        <h6 class="text-uppercase fw-bold mb-4">Liên lạc</h6>
+                        <p>
+                            <i class="fas fa-home me-3"></i> Số 1, Võ Văn Ngân, TP.HCM
+                        </p>
+                        <p>
+                            <i class="fas fa-envelope me-3"></i>
+                            19110@student.hcmute.edu,vn
+                        </p>
+                        <p>
+                            <i class="fas fa-phone me-3"></i> + 84 92371003
+                        </p>
+                        <p>
+                            <i class="fas fa-print me-3"></i> + 84 92371003
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div
+                class="text-center p-4"
+                style={{backgroundColor:"#FFFFFF"}}
+        >
+            © 2024
+            <a class="text-reset fw-bold" href="https://mdbootstrap.com/">
+                HCMUTE.com
+            </a>
+        </div>
+    </footer>
+    <!-- MDB -->
+</div>
+
+<script
+        type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.umd.min.js"
+></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+<script th:src="@{/static/js/home.js}"></script>
+<script>
+    // JavaScript code for filtering products
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get all radio buttons for category and price
+        var categoryRadios = document.querySelectorAll('input[name="category"]');
+        var priceRadios = document.querySelectorAll('input[name="price"]');
+
+        categoryRadios.forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                console.log("Selected category: " + this.value);
+            });
+        });
+
+        priceRadios.forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                console.log("Selected price: " + this.value);
+            });
+        });
+
+        // Attach event listener for category radios
+        categoryRadios.forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                filterProducts();
+            });
+        });
+
+        // Attach event listener for price radios
+        priceRadios.forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                filterProducts();
+            });
+        });
+
+
+
+        function filterProducts() {
+            var selectedCategory = document.querySelector('input[name="category"]:checked').value;
+            var selectedPrice = document.querySelector('input[name="price"]:checked').value;
+            // Loop through all products and hide/show based on selected category and price
+            var products = document.querySelectorAll('.col-md-2');
+
+
+
+            products.forEach(function (product) {
+
+                var category = product.getAttribute('data-product-genre');
+                var price = parseFloat(product.getAttribute('data-product-price'));
+
+                var categoryMatch = selectedCategory === 'all' || category === selectedCategory;
+                var priceMatch = selectedPrice === 'all' || (selectedPrice === '0-100' && price <= 100) || (selectedPrice === '100-150' && price > 100 && price <= 150) || (selectedPrice === '150-300' && price > 1500 && price <= 300) || (selectedPrice === '300-500' && price > 300 && price <= 500) || (selectedPrice === '500-700' && price > 500 && price <= 700) || (selectedPrice === '700-plus' && price > 700);
+
+                if (categoryMatch && priceMatch) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+
+            });
+        }
+
+    });
+</script>
+</html>

@@ -1,87 +1,69 @@
 package com.example.BookStore.controller;
 
-import com.example.BookStore.dto.CommentDTO;
-import com.example.BookStore.dto.ProductDTO;
-import com.example.BookStore.exception.ProductNotFoundException;
-import com.example.BookStore.exception.UserNotFoundException;
-import com.example.BookStore.service.OrderItemService;
+import com.example.BookStore.entity.Product;
+import com.example.BookStore.entity.User;
+import com.example.BookStore.repos.ProductRepos;
 import com.example.BookStore.service.ProductService;
 import com.example.BookStore.service.UserService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-@Controller
-@RequestMapping("/product")
+@Controller@RequiredArgsConstructor
+
 public class ProductController {
-    private final Logger log = LogManager.getLogger(ProductController.class);
 
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private OrderItemService orderItemService;
-    @Autowired
-    private UserService userService;
+    private final ProductService productService;
 
-    @GetMapping("/{productId}")
-    public String getProduct(@PathVariable("productId") Long productId, Model model) {
-        ProductDTO product = new ProductDTO();
-        int amountPurchased = 0;
-        List<CommentDTO> comments = Collections.emptyList();
-        Long userId = userService.getCurrentUserId();
-        boolean isChecked = false;
-        try{
-            product = productService.findById(productId);
-            if(product.isBlocked() || product.isDeleted())
-                return "redirect/home";
-            amountPurchased = orderItemService.countQtyProductByProductId(productId);
-            comments = orderItemService.findCommentByProductId(productId);
-            if(productService.isFavoritedByUser(productId, userId)){
-                isChecked = true;
+    private final UserService userService;
+
+    @GetMapping("/products")
+    public String Products(HttpServletRequest request, Model model) {
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("username")) {
+                    String username = cookie.getValue();
+                    Optional<User> userOptional = userService.getUserByUsername(username);
+                    User user = userOptional.get();
+                    model.addAttribute("user", user);
+                    model.addAttribute("username", username);
+                    break;
+                }
             }
-        } catch (ProductNotFoundException e){
-            log.error("Error while fetching product with Id: {}", productId, e);
         }
-        model.addAttribute("isChecked", isChecked);
-        model.addAttribute("product", product);
-        model.addAttribute("amountPurchased", amountPurchased);
-        model.addAttribute("comments", comments);
-        return "/productDetails";
+        model.addAttribute("products", productService.getsAllProducts());
+        return "/products";
     }
 
-    @GetMapping("/favorites")
-    public String getFavorites(Model model){
-        Long userId = userService.getCurrentUserId();
-        List<ProductDTO> favorites = Collections.emptyList();
+    @GetMapping("/products/search")
+    public String searchProduct(HttpServletRequest request,@RequestParam("query") String query, Model model) {
+        Cookie[] cookies = request.getCookies();
 
-        try {
-            favorites = productService.findFavoriteByUserId(userId);
-        } catch (ProductNotFoundException e){
-            log.error("Error while fetching favorites with Id: {}", userId, e);
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("username")) {
+                    String username = cookie.getValue();
+                    Optional<User> userOptional = userService.getUserByUsername(username);
+                    User user = userOptional.get();
+                    model.addAttribute("username", username);
+                    model.addAttribute("user", user);
+                    break;
+                }
+            }
         }
-
-        model.addAttribute("favorites", favorites);
-        return "/favoriteManage";
+        List<Product> searchResults = productService.searchProducts(query);
+        model.addAttribute("products", searchResults);
+        model.addAttribute("query", query);
+        return "/search";
     }
 
-    @PostMapping("/love")
-    public String addFavorites(@RequestParam("productId") Long productId, RedirectAttributes ra){
-        try{
-            Long userId = userService.getCurrentUserId();
-            productService.loveProduct(productId, userId);
-        } catch (UserNotFoundException e){
-            ra.addFlashAttribute("errorMessage", "Đăng nhập để yêu thích sản phẩm.");
-        }
-        catch (ProductNotFoundException e){
-            log.error("Error while loving product with Id: {}", productId, e);
-        }
-        return "redirect:/product/" + productId;
-    }
 }

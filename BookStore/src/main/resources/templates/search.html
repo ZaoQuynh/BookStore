@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tiệm sách</title>
+    <link rel="icon" type="image/svg+xml" href="https://png.pngtree.com/template/20190809/ourmid/pngtree-reading-book-logo-designs-image_291340.jpg" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/static/css/home.css}">
+    <link rel="stylesheet" th:href="@{/static/css/style.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+            rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.min.css"
+            rel="stylesheet"
+    />
+</head>
+<body>
+<!-- Navbar-->
+<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+    <div class="container-fluid justify-content-between">
+        <!-- Left elements -->
+        <div class="d-flex">
+            <!-- Brand -->
+            <a class="navbar-brand me-2 mb-1 d-flex align-items-center" th:href="@{/}">
+                <img
+                        src="https://png.pngtree.com/template/20190809/ourmid/pngtree-reading-book-logo-designs-image_291340.jpg"
+                        height="30"
+                        loading="lazy"
+                        style="margin-top: 2px;"
+                />
+                Tiệm sách
+            </a>
+
+            <!-- Search form -->
+            <form class="input-group w-auto my-auto d-none d-sm-flex" onsubmit="searchProduct(event)">
+                <input
+                        autocomplete="off"
+                        type="search"
+                        class="form-control rounded"
+                        placeholder="Tìm kiếm sách"
+                        style="min-width: 125px;"
+                        name="searchQuery"
+                />
+                <button th:type="submit" class="input-group-text border-0 d-none d-lg-flex"
+                ><i class="fas fa-search"></i
+                ></button>
+            </form>
+        </div>
+        <!-- Left elements -->
+
+        <header th:if="${username}">
+            <!-- Header khi đã đăng nhập -->
+            <ul class="navbar-nav flex-row">
+
+                <li class="nav-item me-3 me-lg-1" style="display: flex; align-items: center;">
+                    <!-- Icon -->
+                    <a class="link-secondary me-3" href="#">
+                        <i class="fas fa-shopping-cart"></i>
+                    </a>
+                    <a class="nav-link d-sm-flex align-items-sm-center" href="#">
+                        <strong class="d-none d-sm-block ms-1"><span th:text="${username}"></span></strong>
+
+                    </a>
+                </li>
+
+
+                <li class="nav-item dropdown me-3 me-lg-1">
+                    <a
+                            data-mdb-dropdown-init
+                            class="nav-link dropdown-toggle hidden-arrow"
+                            href="#"
+                            id="navbarDropdownMenuLink"
+                            role="button"
+                            aria-expanded="false"
+                    >
+                        <img
+                                src="https://static-00.iconduck.com/assets.00/user-icon-512x512-x23sj495.png"
+                                class="rounded-circle"
+                                height="22"
+                                alt="Black and White Portrait of a Man"
+                                loading="lazy"
+                        />
+                    </a>
+                    <ul
+                            class="dropdown-menu dropdown-menu-end"
+                            aria-labelledby="navbarDropdownMenuLink"
+                    >
+                        <li>
+                            <a class="dropdown-item" th:href="@{/profile}">Trang cá nhân</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">Yêu thích</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">Trò chuyện</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">Lịch sử</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" th:if="${user.role} == 'SELLER'" th:href="@{/profile/statistical}">Thống
+                                kê</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" th:href="@{/logout}">Đăng xuất</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <!-- Các phần khác của header khi đã đăng nhập -->
+        </header>
+        <header th:unless="${username}">
+            <!-- Header khi chưa đăng nhập -->
+            <ul class="navbar-nav flex-row">
+                <li class="nav-item me-3 me-lg-1">
+                    <a class="nav-link d-sm-flex align-items-sm-center" href="#">
+                        <strong class="d-none d-sm-block ms-1">Tài khoản</strong>
+                    </a>
+                </li>
+
+
+                <li class="nav-item dropdown me-3 me-lg-1">
+                    <a
+                            data-mdb-dropdown-init
+                            class="nav-link dropdown-toggle hidden-arrow"
+                            href="#"
+                            id="navbarDropdownMenuLink1"
+                            role="button"
+                            aria-expanded="false"
+                    >
+                        <img
+                                src="https://static-00.iconduck.com/assets.00/user-icon-512x512-x23sj495.png"
+                                class="rounded-circle"
+                                height="22"
+                                alt="Black and White Portrait of a Man"
+                                loading="lazy"
+                        />
+                    </a>
+                    <ul
+                            class="dropdown-menu dropdown-menu-end"
+                            aria-labelledby="navbarDropdownMenuLink"
+                    >
+                        <li>
+                            <a class="dropdown-item" th:href="@{/login}">Đăng nhập</a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" th:href="@{/register}">Đăng ký</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- Các phần khác của header khi chưa đăng nhập -->
+        </header>
+        <!-- Right elements -->
+
+        <!-- Right elements -->
+    </div>
+</nav>
+<div class="index" style="min-height: 788px">
+    <div class="card-body body_search">
+        <div th:style="'margin: 10px;'">
+            <h4>Tìm kiếm: <span th:text="${query}" th:style="'color: gray;'"></span></h4>
+        </div>
+
+        <div class="row">
+            <div style="display: flex;flex-wrap: wrap; justify-content: center;">
+                <!-- Kiểm tra nếu không có sản phẩm -->
+                <div th:if="${#lists.isEmpty(products)}" style="padding-top: 70px;">
+                    <h3>Không tìm thấy sản phẩm.</h3>
+                </div>
+                <!-- Kiểm tra nếu có sản phẩm -->
+                <div class="col-md-3" th:each="product : ${products}" th:if="${not #lists.isEmpty(products)}">
+                    <div class="card mb-4" style="margin: 10px; height: 400px;">
+                        <div class="bg-image hover-overlay" data-mdb-ripple-init data-mdb-ripple-color="light">
+                            <img th:src="${product.img}" class="img-fluid" alt="Product Image"/>
+                            <a href="#!">
+                                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <p class="text_title" th:text="${product.title}" style="font-size: 1rem">></p>
+                            <p class="text_title" th:text="${product.authors}"></p>
+                            <p class="price" th:text="${product.price + ' đ'}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Navbar -->
+    <footer class="text-center text-lg-start bg-body-tertiary text-muted">
+        <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+            <div class="me-5 d-none d-lg-block">
+                <span>Hãy kết nối với chúng tôi trên các mạng xã hội:</span>
+            </div>
+
+            <div>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-google"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+        </section>
+
+        <section class="">
+            <div class="container text-center text-md-start mt-5">
+                <div class="row mt-3">
+                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            <i class="fas fa-gem me-3"></i>Tiệm sách
+                        </h6>
+                        <p>
+                            Nơi cung cấp sách vở phù hợp cho mọi lứa tuổi với đa dạng thể loại được tới từ nhiều nơi
+                            trên thế giới !
+                        </p>
+                    </div>
+
+                    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <h6 class="text-uppercase fw-bold mb-4">Loại sách </h6>
+                        <p>
+                            <a href="#!" class="text-reset">
+                                Truyện tranh
+                            </a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">
+                                Trinh thám
+                            </a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">
+                                Tiểu thuyết
+                            </a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">
+                                Ngôn ngữ
+                            </a>
+                        </p>
+                    </div>
+
+                    <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <h6 class="text-uppercase fw-bold mb-4">Thành viên tham gia</h6>
+                        <p>
+                            <a href="#!" class="text-reset">
+                                Tiên
+                            </a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">
+                                Phát
+                            </a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">
+                                Thắng
+                            </a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">
+                                Giao
+                            </a>
+                        </p>
+                    </div>
+
+                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                        <h6 class="text-uppercase fw-bold mb-4">Liên lạc</h6>
+                        <p>
+                            <i class="fas fa-home me-3"></i> Số 1, Võ Văn Ngân, TP.HCM
+                        </p>
+                        <p>
+                            <i class="fas fa-envelope me-3"></i>
+                            19110@student.hcmute.edu,vn
+                        </p>
+                        <p>
+                            <i class="fas fa-phone me-3"></i> + 84 92371003
+                        </p>
+                        <p>
+                            <i class="fas fa-print me-3"></i> + 84 92371003
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div
+                class="text-center p-4"
+                style={{backgroundColor:"#FFFFFF"}}
+        >
+            © 2024
+            <a class="text-reset fw-bold" href="https://mdbootstrap.com/">
+                HCMUTE.com
+            </a>
+        </div>
+    </footer>
+    <!-- MDB -->
+</div>
+
+<script
+        type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.umd.min.js"
+></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+<script th:src="@{/static/js/home.js}"></script>
+</body>
+</html>

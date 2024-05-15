@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Setter
 @Getter
@@ -23,8 +21,19 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Embedded
-    private Book item;
+    @Column
+    private String title;
+    @Column
+    private String authors;
+    @Column
+    private int publisherYear;
+    @Column
+    private String genre;
+    @Column
+    private String description;
+
+    @Column
+    private String img;
 
     @Column
     private BigDecimal price;
@@ -43,8 +52,8 @@ public class Product {
     private boolean isDeleted;
 
     @ManyToMany(mappedBy = "favoriteProducts")
-    private Set<User> favoriteByUsers = new HashSet<>();
+    private List<User> favoritedByUsers;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
-    private List<CartItem> cartItem;
+    @OneToOne(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private CartItem cartItem;
 }

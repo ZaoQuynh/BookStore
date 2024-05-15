@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link rel="stylesheet" href="/static/css/login.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+            crossorigin="anonymous"></script>
+    <title>Tiệm sách</title>
+    <link rel="icon" type="image/svg+xml" href="https://png.pngtree.com/template/20190809/ourmid/pngtree-reading-book-logo-designs-image_291340.jpg" />
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+        <div class="container-fluid justify-content-between">
+            <!-- Left elements -->
+            <div class="d-flex">
+                <!-- Brand -->
+                <a class="navbar-brand me-2 mb-1 d-flex align-items-center" th:href="@{/}">
+                    <img
+                            src="https://png.pngtree.com/template/20190809/ourmid/pngtree-reading-book-logo-designs-image_291340.jpg"
+                            height="80"
+                            loading="lazy"
+                            style="margin: 2px;"
+                    />
+                </a>
+            </div>
+        </div>
+    </nav>
+    <div class="forms">
+        <div class="form login">
+            <span class="title">Đăng nhập</span>
+            <form id="loginForm" th:action="@{/authentication}" method="post">
+                <div class="input-field">
+                    <input type="text" name="username" placeholder="Nhập tên đăng nhập" required>
+                    <i class="uil uil-user icon"></i>
+                </div>
+                <div class="input-field">
+                    <input type="password" name="password" class="password" placeholder="Nhập mật khẩu" required>
+                    <i class="uil uil-lock icon"></i>
+                    <i class="uil uil-eye-slash showHidePw"></i>
+                </div>
+
+                <div class="checkbox-text">
+                    <div class="checkbox-content">
+
+                    </div>
+
+                    <a th:href="@{/forgot-password}" class="text">Bạn quên mật khẩu?</a>
+                </div>
+
+                <div class="input-field button">
+                    <input type="submit" value="Đăng nhập">
+                </div>
+            </form>
+
+            <div class="login-signup">
+                    <span class="text">Bạn không phải là thành viên ?
+                        <a th:href="@{/register}" class="text signup-text">Đăng ký ngay<a>
+                    </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/static/js/login.js}"></script>
+<script th:src="@{/static/js/script.js}"></script>
+</body>
+</html>

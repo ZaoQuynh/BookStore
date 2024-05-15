@@ -1,16 +1,26 @@
 version: '3'
+
 services:
-  flash-memorizer-db:
-    container_name: book-store-db
+  mysql:
+    container_name: mysql-book-store-container
     image: mysql:latest
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=BookStore
-      - MYSQL_ROOT_HOST=%
+    restart: always
     ports:
       - "3307:3306"
-    volumes:
-      - book-store-data:/var/lib/mysql
+    networks:
+      - networkbookstore
 
-volumes:
-  book-store-data:
+  book-store-app:
+    container_name: app-book-store-container
+    image: book-store-image
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - networkbookstore
+
+networks:
+  networkbookstore:
+    driver: bridge
