@@ -138,12 +138,10 @@ public class CartController {
         Long userId = userService.getCurrentUserId();
 
         try{
-            inforDeliveryDTOs = inforDeliveryService.findByUserId(userId);
             cart = cartService.findActiveByCustomerId(userId);
+            inforDeliveryDTOs = inforDeliveryService.findByUserId(userId);
         } catch (InforDeliveryNotFoundException e){
             log.error("Error while fetching information delivery with userId: {}", userId, e);
-        } catch (CartItemNotFoundException e){
-            log.error("Error while fetching cart with userId: {}", userId, e);
         }
 
         model.addAttribute("cart", cart);
