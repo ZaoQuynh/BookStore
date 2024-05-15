@@ -1,0 +1,58 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="">
+<!DOCTYPE html>
+<html lang="en">
+<!--<link rel="stylesheet" th:href="@{/css/edit.css}">-->
+<head>
+    <meta charset="UTF-8">
+    <title>Cập nhật sản phẩm</title>
+</head>
+<body>
+<div class="container_edit" id="boxeditform" >
+    <h1>Cập nhật sản phẩm</h1>
+    <form th:action="@{/seller/editProduct/{id}(id=${productDTO.id})}" th:object="${productDTO}"  method="post">
+        <div class="form-group">
+
+            <label >Tiêu đề:</label>
+            <input type="text" id="edit-title" th:value="${productDTO.id}" th:field="${productDTO.title}" required>
+        </div>
+        <div class="form-group">
+            <label >Tác giả:</label>
+            <input type="text" id="edit-authors" th:value="${productDTO.authors}" th:field="${productDTO.authors}" required>
+        </div>
+        <div class="form-group">
+            <label >Nhà xuất bản:</label>
+            <input type="text" id="edit-publisher" th:value="${productDTO.publisher}" th:field="${productDTO.publisher}" required>
+        </div>
+        <div class="form-group">
+            <label >Năm xuất bản:</label>
+            <input type="number" id="edit-publisherYear" th:value="${productDTO.publisherYear}" th:field="${productDTO.publisherYear}" min="0" required>
+        </div>
+        <div class="form-group">
+            <label>Thể loại:</label>
+            <input type="text" id="edit-genre" th:value="${productDTO.genre}" th:field="${productDTO.genre}" required>
+        </div>
+        <div class="form-group">
+            <label >Mô tả:</label>
+            <textarea id="edit-description" th:value="${productDTO.description}" th:field="${productDTO.description}" required></textarea>
+        </div>
+        <div class="form-group">
+            <label >Giá:</label>
+            <input type="number" id="edit-price" th:value="${productDTO.price}" th:field="${productDTO.price}" min="0" required>
+        </div>
+        <div class="form-group">
+            <label >Số lương:</label>
+            <input type="number" id="edit-stockQty" th:value="${productDTO.stockQty}" th:field="${productDTO.stockQty}" min="1" required>
+        </div>
+
+        <div class="form-group">
+            <button type="submit">Xác nhận</button>
+            <a th:href="@{/seller}">
+                <button id="closeEdit" >Close</button>
+            </a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

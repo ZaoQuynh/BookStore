@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/css/seller.css}">
+  <title>BookStore</title>
+</head>
+<section id="header">
+  <a>Tiem Sach</a>
+  <div>
+    <ul id="navbar">
+      <li><a class="active" th:href="quanlidonhang">Quan Li Don Hang</a> </li>
+      <li><a class="active" th:href="trochuyen">Tro Chuyen</a> </li>
+      <li><a class="active" th:href="nguoiban">Quan Li Sach</a> </li>
+      <li><form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/></form> </li>
+    </ul>
+  </div>
+</section>
+<body>
+  <!-- Product -->
+  <section  id ="Product" class="section-p1">
+    <h2>Danh sach san pham dang ban</h2>
+    <div class="pro-container">
+     <div class="pro">
+       <div class="des">
+         <table>
+           <thead>
+            <tr>
+              <td><span> Tên </span></td>
+              <td><span> Tác giả </span></td>
+              <td><span> Giá </span></td>
+              <td><span> Mô tả ngắn </span></td>
+              <td><span> Năm xuất bản </span></td>
+              <td><span> Số lượng còn lại </span></td>
+            </tr>
+           </thead>
+           <tbody th:each=" products: ${productList}">
+              <tr>
+                <td><span th:text="${products.title}" > Name </span></td>
+                <td><span th:text="${products.authors}"> Author </span></td>
+                <td><span th:text="${products.price}"> Price </span></td>
+                <td><span th:text="${products.description}"> Description </span></td>
+                <td><span th:text="${products.publisherYear}"> PublisherYear </span></td>
+                <td><span th:text="${products.stockQty}"> Stock </span></td>
+                <td>
+                  <a th:href="@{/seller/editProduct/{id}(id=${products.id})}">
+                    <button class="edit"> Edit </button>
+                  </a>
+                  <button class="delete" th:data-id="${products.id}">Delete</button>
+                </td>
+              </tr>
+           </tbody>
+         </table>
+       </div>
+     </div>
+    </div>
+  </section>
+  <button id="calladdform"> Thêm sản phẩm </button>
+
+  <div class="container" id="boxaddform">
+    <h1>Thêm Sản Phẩm Mới</h1>
+    <form th:action="@{/addProduct}" th:object="${productDTO}" method="post">
+      <div class="form-group">
+        <label for="title">Tiêu đề:</label>
+        <input type="text" id="title" th:field="${productDTO.title}" required>
+      </div>
+      <div class="form-group">
+        <label for="authors">Tác giả:</label>
+        <input type="text" id="authors" th:field="${productDTO.authors}" required>
+      </div>
+      <div class="form-group">
+        <label for="publisher">Nhà xuất bản:</label>
+        <input type="text" id="publisher" th:field="${productDTO.publisher}" required>
+      </div>
+      <div class="form-group">
+        <label for="publisherYear">Năm xuất bản:</label>
+        <input type="number" id="publisherYear" th:field="${productDTO.publisherYear}" min="0" required>
+      </div>
+      <div class="form-group">
+        <label for="genre">Thể loại:</label>
+        <input type="text" id="genre" th:field="${productDTO.genre}" required>
+      </div>
+      <div class="form-group">
+        <label for="description">Mô tả:</label>
+        <textarea id="description" th:field="${productDTO.description}" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="price">Giá:</label>
+        <input type="number" id="price" th:field="${productDTO.price}" min="0" required>
+      </div>
+      <div class="form-group">
+        <label for="stockQty">Số lương:</label>
+        <input type="number" id="stockQty" th:field="${productDTO.stockQty}" min="1" required>
+      </div>
+
+      <div class="form-group">
+        <button type="submit">Xác nhận</button>
+        <button id="closeAdd">Close</button>
+      </div>
+    </form>
+  </div>
+
+</body>
+<script th:src="@{/js/seller.js}"></script>
+</html>

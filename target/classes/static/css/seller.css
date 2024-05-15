@@ -1,0 +1,131 @@
+/* Header */
+
+#header{
+    height: 10px;
+    background-color: #32a9fe;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 80px;
+    position: sticky;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+}
+
+#navbar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#navbar li{
+    list-style: none;
+    padding: 0 10px;
+    position: relative;
+}
+#navbar li a{
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: #000000;
+    transition: 0.2s ease;
+}
+#navbar li a:hover,
+#navbar li a:active{
+    color: #02f6cf;
+}
+
+/* Section */
+.section-p1{
+    padding: 40px 80px;
+}
+
+
+/*product*/
+
+#Product{
+    text-align: center;
+}
+#Product .pro-container {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 20px;
+    flex-wrap: wrap;
+}
+#Product .pro {
+    width: auto;
+    min-width: 250px;
+    padding: 10px 10px;
+    border: 1px solid #000000;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.1);
+    margin: 15px 0;
+    transition: 0.2s ease;
+    position: relative;
+}
+#Product .pro:hover {
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.4);
+}
+#Product .pro img {
+    width: 100%;
+    border-radius: 20px;
+}
+#Product .pro .des {
+    text-align: start;
+    padding: 20px;
+}
+#Product .pro .des span {
+    color: #000000 ;
+    font-size: 18px;
+    padding: 20px;
+}
+#Product .pro .des h5 {
+    padding-top: 10px;
+    color: aquamarine;
+    font-size: 14px;
+}
+
+
+
+
+.container {
+    max-width: 70%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    display: none;
+}
+
+.form-group {
+    margin: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+    width: 60%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
