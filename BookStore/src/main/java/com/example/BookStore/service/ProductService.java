@@ -11,4 +11,6 @@ public interface ProductService {
     List<ProductDTO> findFavoriteByUserId(Long userId);
     boolean isFavoritedByUser(Long productId, Long userId);
     void loveProduct(Long productId, Long userId);
+    ProductDTO findActiveById(Long productId);
+    List<ProductDTO> findActive();
 }

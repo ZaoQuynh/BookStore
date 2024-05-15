@@ -10,16 +10,16 @@
     <link rel="icon" th:href="@{/images/icon_address_bar.png}">
     <link rel="stylesheet" th:href="@{/css/productManage.css}">
     <link rel="stylesheet" th:href="@{/css/message.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
     <style>
-        .product-information-item h3{
+        .product-information-item h3 {
             flex: 1;
             text-align: start;
             padding: 10px;
         }
 
 
-
-        .favorite-item h4{
+        .favorite-item h4 {
             text-align: center;
             margin: 2px;
             width: 170px;
@@ -30,7 +30,7 @@
             text-decoration: none;
         }
 
-        .favorite-item p{
+        .favorite-item p {
             margin: 2px;
             transition: color 0.3s;
             text-decoration: none;
@@ -42,15 +42,13 @@
     </style>
 </head>
 <body>
-<header>
-
-</header>
+<div th:replace="header :: header"></div>
 <section id="content">
     <div class="favorites-manage-container">
         <h2 class="title">My Favorites</h2>
         <th:block th:if="${not #lists.isEmpty(favorites)}">
             <div class="favorites-list">
-                <a class="favorite-item"  th:each="product: ${favorites}"
+                <a class="favorite-item" th:each="product: ${favorites}"
                    th:href="@{'/product/' + ${product.id}}">
                     <div class="img-frame">
                         <img th:src="@{'/images/product/' + ${product.id} + '.png'}" alt="Image Product">
@@ -72,6 +70,7 @@
 </section>
 <footer>
 </footer>
+<script th:src="@{/js/header.js}"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>

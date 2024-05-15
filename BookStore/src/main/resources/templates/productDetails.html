@@ -10,8 +10,9 @@
     <link rel="icon" th:href="@{/images/icon_address_bar.png}">
     <link rel="stylesheet" th:href="@{/css/productDetails.css}">
     <link rel="stylesheet" th:href="@{/css/message.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
     <style>
-        .product-information-item h3{
+        .product-information-item h3 {
             flex: 1;
             text-align: start;
             padding: 10px;
@@ -20,9 +21,8 @@
     </style>
 </head>
 <body>
-<header>
 
-</header>
+<div th:replace="header :: header"></div>
 <section id="content">
     <div th:if="${successMessage}" id="successMessage" class="mess complete" role="alert">
         <p th:text="${successMessage}"/>
@@ -88,9 +88,11 @@
             <div class="product-img-frame">
                 <img class="product-img" th:src="@{'/images/product/' + ${product.id} + '.png'}" alt="product img">
             </div>
-            <form class="product-information-favorite" id="product-information-favorite" th:action="@{/product/love}" th:method="post">
+            <form class="product-information-favorite" id="product-information-favorite" th:action="@{/product/love}"
+                  th:method="post">
                 <input type="hidden" name="productId" th:value="${product.id}">
-                <input id="heart" type="checkbox" th:checked="${isChecked}" onclick="submitForm('product-information-favorite')"/>
+                <input id="heart" type="checkbox" th:checked="${isChecked}"
+                       onclick="submitForm('product-information-favorite')"/>
                 <label for="heart">❤</label>
             </form>
         </div>
@@ -121,7 +123,7 @@
         <hr>
         <i>Bình luận:</i>
         <th:block th:if="${not #lists.isEmpty(comments)}">
-            <div class="comment-list" >
+            <div class="comment-list">
                 <div class="comment-details" th:each="comment: ${comments}">
                     <h4 class="user-name" th:text="${comment.commentorName}"><
                         <ion-icon name="checkmark-done-outline"></ion-icon>
@@ -145,6 +147,7 @@
 </section>
 <footer>
 </footer>
+<script th:src="@{/js/header.js}"></script>
 <script th:src="@{/js/message.js}"></script>
 <script th:src="@{/js/productDetails.js}"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>

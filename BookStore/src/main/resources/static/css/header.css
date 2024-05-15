@@ -1,0 +1,62 @@
+header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.logo{
+    flex: 1;
+    padding: 10px;
+}
+
+.search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.search ion-icon {
+    font-size: 35px;
+}
+
+.search input{
+    border: none;
+    border-bottom: 1px solid black;
+    outline: none;
+    background-color: transparent;
+}
+
+.cart,
+.user {
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.cart ion-icon,
+.user ion-icon {
+    font-size: 35px;
+}
+
+.logo button,
+.cart button{
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.menu {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    right: 0;
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.menu a {
+    cursor: pointer;
+}

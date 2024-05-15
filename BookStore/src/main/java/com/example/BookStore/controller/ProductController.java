@@ -32,15 +32,13 @@ public class ProductController {
 
     @GetMapping("/{productId}")
     public String getProduct(@PathVariable("productId") Long productId, Model model) {
-        ProductDTO product = new ProductDTO();
-        int amountPurchased = 0;
-        List<CommentDTO> comments = Collections.emptyList();
+        ProductDTO product;
+        int amountPurchased;
+        List<CommentDTO> comments;
         Long userId = userService.getCurrentUserId();
         boolean isChecked = false;
         try{
-            product = productService.findById(productId);
-            if(product.isBlocked() || product.isDeleted())
-                return "redirect/home";
+            product = productService.findActiveById(productId);
             amountPurchased = orderItemService.countQtyProductByProductId(productId);
             comments = orderItemService.findCommentByProductId(productId);
             if(productService.isFavoritedByUser(productId, userId)){
@@ -48,6 +46,7 @@ public class ProductController {
             }
         } catch (ProductNotFoundException e){
             log.error("Error while fetching product with Id: {}", productId, e);
+            return "redirect:/home";
         }
         model.addAttribute("isChecked", isChecked);
         model.addAttribute("product", product);

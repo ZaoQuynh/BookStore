@@ -2,10 +2,51 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Trang chủ</title>
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" th:href="@{/images/icon_address_bar.png}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/message.css}">
 </head>
 <body>
-    <p>Xin chào nhé!</p>
+<div th:replace="header :: header"></div>
+
+<section id="content">
+    <div th:if="${successMessage}" id="successMessage" class="mess complete" role="alert">
+        <p th:text="${successMessage}"/>
+        <button class="close-mess">
+            <ion-icon name="close-circle-outline"></ion-icon>
+        </button>
+    </div>
+    <div th:if="${errorMessage}" id="errorMessage" class="mess error" role="alert">
+        <p th:text="${errorMessage}"/>
+        <button class="close-mess">
+            <ion-icon name="close-circle-outline"></ion-icon>
+        </button>
+    </div>
+    <th:block th:if="${not #lists.isEmpty(products)}">
+        <div class="products-list">
+            <a class="product-item" th:each="product: ${products}"
+               th:href="@{'/product/' + ${product.id}}">
+                <div class="img-frame">
+                    <img th:src="@{'/images/product/' + ${product.id} + '.png'}" alt="Image Product">
+                </div>
+                <h4 th:text="${product.item.title}"/>
+                <p th:text="${product.formatCurrentPrice}"/>
+                <p class="overlay-text" th:text="${product.formatDiscountPercent}"/>
+            </a>
+        </div>
+    </th:block>
+</section>
+<footer>
+</footer>
+<script th:src="@{/js/header.js}"></script>
+<script th:src="@{/js/message.js}"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
 </html>

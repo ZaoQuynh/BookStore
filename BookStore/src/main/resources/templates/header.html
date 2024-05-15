@@ -1,0 +1,24 @@
+<header>
+
+    <form th:action="@{/home}" th:method="get" class="logo">
+        <button>
+            <h1>Book Store</h1>
+        </button>
+    </form>
+    <div class="search">
+        <input type="text" placeholder="Tìm kiếm">
+        <ion-icon name="search-outline"></ion-icon>
+    </div>
+    <form th:action="@{/cart}" th:method="get" class="cart">
+        <button>
+            <ion-icon name="cart-outline"></ion-icon>
+        </button>
+    </form>
+    <div class="user" onclick="toggleMenu()">
+        <ion-icon name="person-circle-outline"></ion-icon>
+        <div class="menu" id="userMenu">
+            <a href="">Lịch sử</a>
+            <a th:href="@{/product/favorites}">Yêu thích</a>
+        </div>
+    </div>
+</header>

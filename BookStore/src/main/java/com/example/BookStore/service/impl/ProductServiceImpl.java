@@ -108,4 +108,20 @@ public class ProductServiceImpl implements ProductService {
         repos.save(product);
         userRepos.save(user);
     }
+
+    @Override
+    public ProductDTO findActiveById(Long id) {
+        Product product = repos
+                .findActiveById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Could not find any product with Id=" + id));
+        return mapper.toDto(product);
+    }
+
+    @Override
+    public List<ProductDTO> findActive() {
+        List<Product> products = repos.findActive();
+        if (products == null || products.isEmpty())
+            throw new ProductNotFoundException("Could not find active product");
+        return mapper.toDto(products);
+    }
 }

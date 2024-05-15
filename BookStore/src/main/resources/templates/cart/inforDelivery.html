@@ -10,8 +10,9 @@
     <link rel="icon" th:href="@{/images/icon_address_bar.png}">
     <link rel="stylesheet" th:href="@{/css/inforDelivery.css}">
     <link rel="stylesheet" th:href="@{/css/message.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
     <style>
-        .product_img-frame{
+        .product_img-frame {
             width: 100px;
             height: 100px;
             display: flex;
@@ -20,7 +21,7 @@
             overflow: hidden;
         }
 
-        .product_img{
+        .product_img {
             height: 100%;
             width: auto;
             max-width: 100px;
@@ -30,9 +31,7 @@
     </style>
 </head>
 <body>
-<header>
-
-</header>
+<div th:replace="header :: header"></div>
 <section id="content">
     <div class="infor_delivery-content">
         <div th:if="${successMessage}" id="successMessage" class="mess complete" role="alert">
@@ -91,10 +90,8 @@
                             <tr class="product-img-container">
                                 <th>
                                     <div class="product_img-frame">
-                                        <a href="#">
-                                            <img class="product_img" alt="Product Image"
-                                                 th:src="@{'/images/product/' + ${cartItem.product.id} + '.png'}">
-                                        </a>
+                                        <img class="product_img" alt="Product Image"
+                                             th:src="@{'/images/product/' + ${cartItem.product.id} + '.png'}">
                                     </div>
                                 </th>
                             </tr>
@@ -102,9 +99,7 @@
                             <tbody class="product_details">
                             <tr class="product_details-left">
                                 <td class="product-title">
-                                    <a href="#">
-                                        <strong th:text="${cartItem.product.item.title}"/>
-                                    </a>
+                                    <strong th:text="${cartItem.product.item.title}"/>
                                 </td>
                                 <td class="product-current-price" th:text="${cartItem.product.formatCurrentPrice}"/>
                             </tr>
@@ -123,7 +118,9 @@
                 <p th:text="${totalPrice}">
             </div>
             <hr>
-            <button class="btn-continue" onclick="submitForm('select-infor-delivery')" th:if="${not #lists.isEmpty(cart)}">Tiếp tục</button>
+            <button class="btn-continue" onclick="submitForm('select-infor-delivery')"
+                    th:if="${not #lists.isEmpty(cart)}">Tiếp tục
+            </button>
 
             <form th:action="@{/cart}" th:method="get">
                 <button class="btn-cancel">Trở lại</button>
@@ -167,6 +164,7 @@
 <footer>
 
 </footer>
+<script th:src="@{/js/header.js}"></script>
 <script th:src="@{/js/inforDelivery.js}"></script>
 <script th:src="@{/js/message.js}"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>

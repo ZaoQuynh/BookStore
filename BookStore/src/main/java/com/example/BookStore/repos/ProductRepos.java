@@ -15,5 +15,9 @@ public interface ProductRepos extends JpaRepository<Product, Long> {
     List<Product> findFavoriteByUserId(Long userId);
     @Query("SELECT o FROM Product o JOIN o.favoriteByUsers u WHERE o.id = ?1 AND u.id = ?2")
     Optional<Product> isFavoritedByUser(Long productId, Long userId);
+    @Query("SELECT o FROM Product o WHERE o.isBlocked = false and  o.isDeleted = false and o.id = ?1")
+    Optional<Product> findActiveById(Long id);
 
+    @Query("SELECT o FROM Product o WHERE o.isBlocked = false and  o.isDeleted = false")
+    List<Product> findActive();
 }

@@ -1,7 +1,6 @@
 package com.example.BookStore.controller;
 
 import com.example.BookStore.dto.*;
-import com.example.BookStore.entity.Payment;
 import com.example.BookStore.exception.CartItemNotFoundException;
 import com.example.BookStore.exception.InforDeliveryNotFoundException;
 import com.example.BookStore.exception.InsufficientStockException;
@@ -70,7 +69,6 @@ public class CartController {
                               @RequestParam("productQty") String qtyStr,
                               RedirectAttributes ra){
         try {
-
             ProductDTO product = productService.findById(productId);
             UserDTO customer = userService.findById(userService.getCurrentUserId());
             int newQty = Utils.toInt(qtyStr);
@@ -123,11 +121,14 @@ public class CartController {
     public String deleteCartItem(@RequestParam("id") Long cartItemId,
                                  RedirectAttributes ra) {
         try {
-            cartItemService.delete(cartItemId);
-            ra.addFlashAttribute("successMessage", "Xóa sản phẩm thành công.");
+            if(cartItemService.delete(cartItemId)) {
+                ra.addFlashAttribute("successMessage", "Xóa sản phẩm thành công.");
+            } else {
+                ra.addFlashAttribute("Xóa sản phẩm thất bại.");
+            }
         } catch (CartItemNotFoundException e) {
             log.error("Error while deleting cartItem with Id: {}", cartItemId, e);
-            ra.addFlashAttribute("Xóa sản phẩm thất bại.");
+            ra.addFlashAttribute("Sản phẩm không tồn tại trong giỏ hàng.");
         }
         return "redirect:/cart";
     }

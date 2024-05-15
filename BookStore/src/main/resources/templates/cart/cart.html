@@ -10,11 +10,10 @@
     <link rel="icon" th:href="@{/images/icon_address_bar.png}">
     <link rel="stylesheet" th:href="@{/css/cart.css}">
     <link rel="stylesheet" th:href="@{/css/message.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
 </head>
 <body>
-<header>
-
-</header>
+<div th:replace="header :: header"></div>
 <section id="content">
     <div th:if="${successMessage}" id="successMessage" class="mess complete" role="alert">
         <p th:text="${successMessage}"/>
@@ -77,7 +76,8 @@
                                                     <ion-icon name="remove-outline"></ion-icon>
                                                 </button>
                                                 <input class="input-quantity" type="text"
-                                                       th:placeholder="${cartItem.qty}" onkeypress="handleKeyPress(event)"
+                                                       th:placeholder="${cartItem.qty}"
+                                                       onkeypress="handleKeyPress(event)"
                                                        onchange="submitForm(this, this.value, '')"/>
                                                 <button class="button-add" onclick="submitForm(this, 1, 'button')">
                                                     <ion-icon name="add-outline"></ion-icon>
@@ -99,10 +99,10 @@
                                     <td class="product-total-price" th:text="${cartItem.formatTotalPrice}"/>
                                 </th:block>
                                 <th:block
-                                        th:if="${(cartItem.product.isBlocked || cartItem.product.isDeleted || cartItem.product.stockQty<=0)}">
+                                        th:if="${(cartItem.product.isBlocked || cartItem.product.isDeleted)}">
                                     <td style="color: red;">Sản phẩm không tổn tại</td>
                                 </th:block>
-                                <th:block th:if="${(cartItem.qty > cartItem.product.stockQty)}">
+                                <th:block th:if="${(cartItem.qty > cartItem.product.stockQty || cartItem.product.stockQty<=0) && not (cartItem.product.isBlocked || cartItem.product.isDeleted)}">
                                     <td style="color: red;">Sản phẩm không còn đủ hàng</td>
                                 </th:block>
                                 <td class="product-control" style="height: 100%;">
@@ -150,6 +150,7 @@
 <footer>
 
 </footer>
+<script th:src="@{/js/header.js}"></script>
 <script th:src="@{/js/message.js}"></script>
 <script th:src="@{/js/cart.js}"></script>
 <script>
@@ -177,7 +178,7 @@
 
     function handleKeyPress(event) {
         if (event.keyCode === 13) {
-            event.preventDefault(); // Ngăn chặn hành vi mặc định của phím Enter
+            event.preventDefault();
         }
     }
 </script>
