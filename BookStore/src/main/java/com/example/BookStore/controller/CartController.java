@@ -4,6 +4,7 @@ import com.example.BookStore.dto.*;
 import com.example.BookStore.entity.Payment;
 import com.example.BookStore.exception.CartItemNotFoundException;
 import com.example.BookStore.exception.InforDeliveryNotFoundException;
+import com.example.BookStore.exception.UserNotFoundException;
 import com.example.BookStore.service.*;
 import com.example.BookStore.utility.Utils;
 import jakarta.servlet.http.HttpSession;
@@ -68,6 +69,7 @@ public class CartController {
                               @RequestParam("productQty") String qtyStr,
                               RedirectAttributes ra){
         try {
+
             ProductDTO product = productService.findById(productId);
             UserDTO customer = userService.findById(userService.getCurrentUserId());
             int newQty = Utils.toInt(qtyStr);
@@ -83,6 +85,10 @@ public class CartController {
             } else if (bonusQty == 0){
                 ra.addFlashAttribute("errorMessage", "Sản phẩm trong giỏ hàng sẽ vượt quá số lượng trong kho.");
             }
+        } catch (UserNotFoundException e){
+            ra.addFlashAttribute("errorMessage", "Đăng nhập để thêm sản phẩm vòa giỏ hàng.");
+        } catch (NumberFormatException e){
+            ra.addFlashAttribute("errorMessage", "Vui lòng nhập số lượng hợp lệ.");
         } catch (Exception e){
             log.error(e.getMessage());
             ra.addFlashAttribute("errorMessage", "Thêm sản phẩm vào giỏ hàng thất bại.");

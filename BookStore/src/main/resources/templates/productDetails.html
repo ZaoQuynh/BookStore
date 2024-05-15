@@ -127,7 +127,7 @@
                         <ion-icon name="checkmark-done-outline"></ion-icon>
                     </h4>
                     <p class="comment-content" th:text="${comment.commentText}"/>
-                    <div class="feedback-details">
+                    <div class="feedback-details" th:if="${comment.feedbackText != null}">
                         <ion-icon name="return-down-forward-outline"></ion-icon>
                         <p class="feedback-content" th:text="${comment.feedbackText}"/>
                     </div>
