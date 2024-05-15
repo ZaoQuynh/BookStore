@@ -39,6 +39,14 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public List<CartItemDTO> findActiveByCustomerIdForPayment(Long userId) {
+        List<CartItem> cartItems = cartItemRepos.findActiveByCustomerIdForPayment(userId);
+        if (cartItems == null || cartItems.isEmpty())
+            throw new CartItemNotFoundException("Could not find any active product with userId=" + userId);
+        return cartItemMapper.toDto(cartItems);
+    }
+
+    @Override
     public List<CartItemDTO> findByCustomerId(Long userId) {
         List<CartItem> cartItems = cartItemRepos.findByCustomer_Id(userId);
         if (cartItems == null || cartItems.isEmpty())

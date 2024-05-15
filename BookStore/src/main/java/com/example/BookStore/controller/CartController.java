@@ -4,6 +4,7 @@ import com.example.BookStore.dto.*;
 import com.example.BookStore.entity.Payment;
 import com.example.BookStore.exception.CartItemNotFoundException;
 import com.example.BookStore.exception.InforDeliveryNotFoundException;
+import com.example.BookStore.exception.InsufficientStockException;
 import com.example.BookStore.exception.UserNotFoundException;
 import com.example.BookStore.service.*;
 import com.example.BookStore.utility.Utils;
@@ -83,7 +84,7 @@ public class CartController {
             if(bonusQty>0){
                 ra.addFlashAttribute("successMessage", "Đã thêm " + bonusQty + " sản phẩm vào giỏ hàng.");
             } else if (bonusQty == 0){
-                ra.addFlashAttribute("errorMessage", "Sản phẩm trong giỏ hàng sẽ vượt quá số lượng trong kho.");
+                ra.addFlashAttribute("errorMessage", "Hết hàng.");
             }
         } catch (UserNotFoundException e){
             ra.addFlashAttribute("errorMessage", "Đăng nhập để thêm sản phẩm vòa giỏ hàng.");
@@ -221,35 +222,22 @@ public class CartController {
             return "redirect:/methodPayment";
         }
 
-        List<CartItemDTO> cart;
         Long userId = userService.getCurrentUserId();
         Long inforDeliveryId = (Long) session.getAttribute("inforDeliveryId");
         System.out.printf(inforDeliveryId.toString());
 
         try {
-            cart = cartService.findActiveByCustomerId(userId);
-            List<OrderDTO> orderDTOs = orderService.convertCartToOrder(cart);
-
-            PaymentDTO payment = new PaymentDTO(Payment.EPaymentMethod.valueOf(methodPayment),
-                    Payment.EPaymentStatus.UNPAID, null);
-            InforDeliveryDTO inforDelivery = inforDeliveryService.findById(inforDeliveryId);
-
-            orderDTOs.forEach(item -> {
-                item.setPayment(payment);
-                item.setInforDelivery(inforDelivery);
-                orderService.add(item);
-            });
-            cartService.delete(cart);
+            orderService.payment(userId, inforDeliveryId, methodPayment);
             return "redirect:/success";
-        } catch (CartItemNotFoundException e) {
-            log.error("Error while fetching cart with userId: {}", userId, e);
-            redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy giỏ hàng.");
+        } catch (InsufficientStockException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Sản phẩm đã bị mua hết.");
+            return "redirect:/cart";
         } catch(Exception e){
             log.error(e.getMessage());
             redirectAttributes.addFlashAttribute("errorMessage", "Thanh toán thất bại.");
         }
 
-        return "redirect:/methodPayment";
+        return "redirect:/checkInforDelivery";
     }
 
     @GetMapping("/success")

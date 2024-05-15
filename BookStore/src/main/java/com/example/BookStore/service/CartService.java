@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface CartService {
     List<CartItemDTO> findActiveByCustomerId(Long userId);
+    List<CartItemDTO> findActiveByCustomerIdForPayment(Long userId);
     List<CartItemDTO> findByCustomerId(Long userId);
     BigDecimal totalPriceOfCart(List<CartItemDTO> cart);
     void delete(List<CartItemDTO> cart);
